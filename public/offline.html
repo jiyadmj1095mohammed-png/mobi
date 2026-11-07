@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOBI — Campus Offline</title>
+  <style>
+    @font-face {
+      font-family: 'Instrument Serif';
+      font-style: normal;
+      font-weight: 400;
+      src: url('https://fonts.gstatic.com/s/instrumentserif/v5/jizBRFtNs2ka5fXjeivQ4LroWlx-6zUTjnTLgNs.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400 500;
+      src: url('https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2') format('woff2');
+    }
+
+    :root {
+      --u: calc(100vw / 1902);
+      --lit: 0;
+      --halo-opacity: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0d1217;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .offline-container {
+      position: relative;
+      width: 100vw;
+      height: 100svh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Video & Background Layer */
+    .media-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    video.scene-clip {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center bottom;
+      display: block;
+    }
+
+    /* Canvas Overlay for Scanline & Glints */
+    canvas#overlay-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Top soft dark wash (38%) */
+    .top-tint {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 38%;
+      background: linear-gradient(to bottom, rgba(10, 15, 20, 0.85) 0%, rgba(10, 15, 20, 0.45) 60%, transparent 100%);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* Top Banner Notification */
+    .status-pill {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      background: rgba(18, 20, 23, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      font-size: 13px;
+      font-weight: 500;
+      color: #e5f876;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e5f876;
+      box-shadow: 0 0 10px #e5f876;
+      transition: background 0.3s;
+    }
+
+    .status-pill.offline .status-dot {
+      background: #ff5555;
+      box-shadow: 0 0 10px #ff5555;
+    }
+
+    .status-pill.offline {
+      color: #ff8888;
+    }
+
+    /* Main Content Grid */
+    .footer-grid {
+      position: relative;
+      z-index: 5;
+      padding-top: calc(78 * var(--u));
+      padding-left: calc(105 * var(--u));
+      padding-right: calc(105 * var(--u));
+      display: grid;
+      grid-template-columns: calc(528 * var(--u)) calc(404 * var(--u)) calc(404 * var(--u)) 1fr;
+      gap: calc(24 * var(--u));
+      opacity: 0;
+      transform: translateY(calc(10 * var(--u)));
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .footer-grid.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Brand Column */
+    .brand-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .wordmark-wrap {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .wordmark-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: 'Instrument Serif', serif;
+      font-size: calc(58 * var(--u));
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      position: relative;
+      outline: none;
+      user-select: none;
+    }
+
+    .power-o-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: calc(48 * var(--u));
+      height: calc(58 * var(--u));
+      margin: 0 calc(2 * var(--u));
+      transition: transform 0.15s ease;
+    }
+
+    .wordmark-btn:hover .power-o-wrap {
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    }
+
+    .wordmark-btn:active .power-o-wrap {
+      transform: scale(0.94);
+    }
+
+    .power-o-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .power-halo {
+      position: absolute;
+      inset: -20%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(229, 248, 118, 0.4) 40%, transparent 70%);
+      opacity: var(--lit);
+      pointer-events: none;
+      filter: blur(8px);
+      transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tagline {
+      font-size: calc(19.5 * var(--u));
+      line-height: 1.5;
+      max-width: calc(300 * var(--u));
+      color: rgba(255, 255, 255, 0.8);
+      margin-top: calc(20 * var(--u));
+    }
+
+    .copyright {
+      font-size: calc(15 * var(--u));
+      color: rgba(255, 255, 255, 0.45);
+      margin-top: calc(34 * var(--u));
+    }
+
+    /* Link Columns */
+    .link-col {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-heading {
+      font-family: 'Instrument Serif', serif;
+      font-size: calc(35 * var(--u));
+      font-weight: 400;
+      color: #ffffff;
+      margin-bottom: calc(40 * var(--u));
+    }
+
+    .link-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: calc(19 * var(--u));
+    }
+
+    .nav-link {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: calc(19.5 * var(--u));
+      position: relative;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: calc(1.6 * var(--u));
+      background: #ffffff;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .nav-link:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    /* Flying Glowing Dot for CRT collapse transition */
+    #flying-dot {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 16px 8px rgba(255, 255, 255, 0.95), 0 0 32px 14px rgba(229, 248, 118, 0.6);
+      pointer-events: none;
+      z-index: 100;
+      display: none;
+    }
+
+    /* Return to Dashboard Button */
+    .reconnect-bar {
+      position: relative;
+      z-index: 10;
+      margin-left: calc(105 * var(--u));
+      margin-bottom: calc(40 * var(--u));
+    }
+
+    .reconnect-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: 9999px;
+      background: #e5f876;
+      color: #121417;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .reconnect-btn:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+    }
+
+    /* Responsive Phone Styles (<= 760px) */
+    @media (max-width: 760px) {
+      .footer-grid {
+        padding-top: 40px;
+        padding-left: 24px;
+        padding-right: 24px;
+        grid-template-columns: 1fr 1fr;
+        gap: 28px;
+      }
+
+      .brand-col {
+        grid-column: span 2;
+      }
+
+      .wordmark-btn {
+        font-size: 44px;
+      }
+
+      .power-o-wrap {
+        width: 36px;
+        height: 44px;
+      }
+
+      .tagline {
+        font-size: 15px;
+        max-width: 100%;
+      }
+
+      .col-heading {
+        font-size: 24px;
+        margin-bottom: 16px;
+      }
+
+      .nav-link {
+        font-size: 14px;
+      }
+
+      video.scene-clip {
+        width: 170%;
+        margin-left: -35%;
+      }
+
+      .reconnect-bar {
+        margin-left: 24px;
+        margin-bottom: 24px;
+      }
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      video.scene-clip {
+        display: none;
+      }
+      .media-layer {
+        background: url('https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/af6deff1-d678-4dc6-ae24-2880b16cdb20.jpg') center bottom / cover no-repeat;
+      }
+      .footer-grid {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-container" id="container">
+    <!-- Top Soft Wash -->
+    <div class="top-tint"></div>
+
+    <!-- Status Pill -->
+    <div class="status-pill" id="statusPill">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">Campus Link Active</span>
+    </div>
+
+    <!-- Video & Canvas Media Layer -->
+    <div class="media-layer">
+      <video
+        id="sceneVideo"
+        class="scene-clip"
+        playsinline
+        muted
+        preload="auto"
+        poster="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/af6deff1-d678-4dc6-ae24-2880b16cdb20.jpg"
+      >
+        <source
+          media="(max-width: 900px)"
+          src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/15017aa7-135b-471f-a8a1-42a208bc61b2.mp4"
+          type="video/mp4"
+        />
+        <source
+          src="https://d2ol7oe51mr4n9.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/abdab52e-bb1b-477d-ae7c-26c5f8915433.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <canvas id="overlay-canvas"></canvas>
+    </div>
+
+    <!-- Flying Orb element for CRT collapse -->
+    <div id="flying-dot"></div>
+
+    <!-- Main Footer Grid -->
+    <div class="footer-grid in-view" id="footerGrid">
+      <!-- Brand Column with Interactive Power-O Wordmark -->
+      <div class="brand-col">
+        <div class="wordmark-wrap">
+          <button
+            class="wordmark-btn"
+            id="powerBtn"
+            aria-pressed="false"
+            aria-label="Toggle Online and Offline mode"
+            title="Click to power off / on"
+          >
+            <span>m</span>
+            <span class="power-o-wrap" id="powerOWrap">
+              <span class="power-halo" id="powerHalo"></span>
+              <svg class="power-o-svg" viewBox="0 0 50 62">
+                <path
+                  d="M14.2 22.6 A19 19 0 1 0 35.8 22.6"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="4.6"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M25 6.5 V33"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="4.6"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </span>
+            <span>bi</span>
+          </button>
+        </div>
+
+        <p class="tagline">
+          Everything you need when the campus network disconnects. Tap the power button to reconnect.
+        </p>
+
+        <p class="copyright">
+          &copy; 2026 MOBI &middot; MEA Engineering College. All rights reserved.
+        </p>
+      </div>
+
+      <!-- Column 1: Campus Navigation (Adapted to MOBI) -->
+      <div class="link-col">
+        <h3 class="col-heading">Navigation</h3>
+        <ul class="link-list">
+          <li><a href="/app/map" class="nav-link">3D Campus Map</a></li>
+          <li><a href="/app/map" class="nav-link">Academic Blocks</a></li>
+          <li><a href="/app/eco" class="nav-link">19 Waste Bins</a></li>
+          <li><a href="/app/eco" class="nav-link">Purified Water Points</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 2: Ecosystem (Adapted to MOBI) -->
+      <div class="link-col">
+        <h3 class="col-heading">Ecosystem</h3>
+        <ul class="link-list">
+          <li><a href="/app/eco" class="nav-link">MOBI ECO Care</a></li>
+          <li><a href="/app/events" class="nav-link">Tech Symposiums</a></li>
+          <li><a href="/app/wallet" class="nav-link">Mobi Wallet Ledger</a></li>
+          <li><a href="/app/connect" class="nav-link">Civic Peer Chat</a></li>
+        </ul>
+      </div>
+
+      <!-- Column 3: System Status -->
+      <div class="link-col">
+        <h3 class="col-heading">Support</h3>
+        <ul class="link-list">
+          <li><a href="/app/campus-connect" class="nav-link">Campus Notices</a></li>
+          <li><a href="javascript:location.reload()" class="nav-link">Retry Connection</a></li>
+          <li><a href="/admin" class="nav-link">Admin Cell</a></li>
+          <li><a href="/app" class="nav-link">Student Hub</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Reconnect Bar Action Button -->
+    <div class="reconnect-bar">
+      <a href="/app" class="reconnect-btn">
+        <span>Return to Campus Hub</span>
+        <span>&rarr;</span>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const video = document.getElementById('sceneVideo');
+      const canvas = document.getElementById('overlay-canvas');
+      const ctx = canvas.getContext('2d');
+      const powerBtn = document.getElementById('powerBtn');
+      const powerOWrap = document.getElementById('powerOWrap');
+      const powerHalo = document.getElementById('powerHalo');
+      const flyingDot = document.getElementById('flying-dot');
+      const statusPill = document.getElementById('statusPill');
+      const statusText = document.getElementById('statusText');
+
+      let isOnline = true;
+      let isSwitching = false;
+      let animFrameId = null;
+
+      // Scanline & glints state
+      let scanlineY = 0;
+      let lastScanTime = performance.now();
+      const stars = [];
+
+      // Generate random star positions
+      for (let i = 0; i < 24; i++) {
+        stars.push({
+          x: Math.random(),
+          y: Math.random() * 0.45, // in the sky area
+          size: 1 + Math.random() * 2,
+          phase: Math.random() * Math.PI * 2,
+          speed: 1.5 + Math.random() * 2,
+        });
+      }
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // Video timeline management
+      // Clip: 0..1.17s Day, screen off; 1.2..1.6s switch on line to static/bars; 1.9..2.7s pause on colour bars (2.3s)
+      function initArrival() {
+        video.currentTime = 0.6;
+        video.play().catch(() => {});
+        const checkArrival = () => {
+          if (video.currentTime >= 2.3 && isOnline && !isSwitching) {
+            video.pause();
+            video.currentTime = 2.3;
+          } else {
+            requestAnimationFrame(checkArrival);
+          }
+        };
+        requestAnimationFrame(checkArrival);
+      }
+
+      video.addEventListener('loadeddata', () => {
+        initArrival();
+      });
+
+      // Canvas Overlay Loop: Scanlines over CRT glass and twinkling glints
+      function renderOverlay(now) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Compute video cover coordinates relative to canvas
+        const vw = 1920;
+        const vh = 1080;
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const scale = Math.max(cw / vw, ch / vh);
+        const nw = vw * scale;
+        const nh = vh * scale;
+        const ox = (cw - nw) / 2;
+        const oy = ch - nh; // object-position: center bottom
+
+        // 1. Scanlines on CRT screen glass (806, 505) to (1077, 724)
+        if (isOnline && video.currentTime <= 3.5) {
+          const sx = ox + 806 * scale;
+          const sy = oy + 505 * scale;
+          const sw = (1077 - 806) * scale;
+          const sh = (724 - 505) * scale;
+
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(sx, sy, sw, sh);
+          ctx.clip();
+
+          // Scanline band (52px tall, 10% white) sweeping down every 1.8s
+          const elapsed = (now - lastScanTime) % 1800;
+          const progress = elapsed / 1800;
+          const bandY = sy + progress * (sh + 60) - 30;
+
+          const grad = ctx.createLinearGradient(0, bandY - 26, 0, bandY + 26);
+          grad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+          grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.14)');
+          grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+          ctx.fillStyle = grad;
+          ctx.fillRect(sx, bandY - 26, sw, 52);
+          ctx.restore();
+        }
+
+        // 2. Twinkling glints in the sky
+        const starCount = isOnline ? 10 : 22;
+        for (let i = 0; i < starCount; i++) {
+          const st = stars[i];
+          const px = st.x * canvas.width;
+          const py = st.y * canvas.height;
+          const brightness = (Math.sin(now * 0.002 * st.speed + st.phase) + 1) / 2;
+
+          ctx.save();
+          ctx.fillStyle = `rgba(255, 255, 255, ${brightness * 0.75})`;
+          ctx.beginPath();
+          // Draw a small 4-point star glint
+          ctx.arc(px, py, st.size * (0.6 + brightness * 0.4), 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        requestAnimationFrame(renderOverlay);
+      }
+      requestAnimationFrame(renderOverlay);
+
+      // Power Button Click Handler
+      powerBtn.addEventListener('click', () => {
+        if (isSwitching) return;
+
+        if (isOnline) {
+          // Switch to OFFLINE
+          isSwitching = true;
+          isOnline = false;
+          powerBtn.setAttribute('aria-pressed', 'true');
+          statusPill.classList.add('offline');
+          statusText.textContent = 'Campus Link Offline';
+
+          video.currentTime = 2.3;
+          video.play();
+
+          // Track video time for CRT collapse at 4.72s
+          let dotLaunched = false;
+          const checkCollapse = () => {
+            if (video.currentTime >= 4.72 && !dotLaunched) {
+              dotLaunched = true;
+              launchFlyingDot();
+            }
+
+            if (video.currentTime >= 4.95) {
+              video.pause();
+              video.currentTime = 4.95;
+              isSwitching = false;
+            } else {
+              requestAnimationFrame(checkCollapse);
+            }
+          };
+          requestAnimationFrame(checkCollapse);
+        } else {
+          // Switch to ONLINE
+          isSwitching = true;
+          isOnline = true;
+          powerBtn.setAttribute('aria-pressed', 'false');
+          statusPill.classList.remove('offline');
+          statusText.textContent = 'Campus Link Active';
+
+          video.currentTime = 0.6;
+          video.play();
+
+          const checkOnline = () => {
+            if (video.currentTime >= 2.3) {
+              video.pause();
+              video.currentTime = 2.3;
+              isSwitching = false;
+            } else {
+              requestAnimationFrame(checkOnline);
+            }
+          };
+          requestAnimationFrame(checkOnline);
+        }
+      });
+
+      // Launch Flying Glowing Orb from CRT collapse point (945, 594) to power-o
+      function launchFlyingDot() {
+        const vw = 1920;
+        const vh = 1080;
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const scale = Math.max(cw / vw, ch / vh);
+        const nw = vw * scale;
+        const nh = vh * scale;
+        const ox = (cw - nw) / 2;
+        const oy = ch - nh;
+
+        // Screen center point (945, 594) in clip frame
+        const startX = ox + 945 * scale;
+        const startY = oy + 594 * scale;
+
+        // Target: center of the power-o
+        const rect = powerOWrap.getBoundingClientRect();
+        const endX = rect.left + rect.width / 2;
+        const endY = rect.top + rect.height / 2;
+
+        flyingDot.style.display = 'block';
+
+        const startTime = performance.now();
+        const duration = 780; // 0.78 s
+
+        // Control point for curved eased quadratic trajectory
+        const controlX = Math.min(startX, endX) - 60;
+        const controlY = Math.min(startY, endY) - 40;
+
+        function animateDot(t) {
+          const elapsed = t - startTime;
+          const p = Math.min(1, elapsed / duration);
+          // Cubic in-out easing
+          const ease = p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+
+          // Quadratic Bezier curve
+          const x = (1 - ease) * (1 - ease) * startX + 2 * (1 - ease) * ease * controlX + ease * ease * endX;
+          const y = (1 - ease) * (1 - ease) * startY + 2 * (1 - ease) * ease * controlY + ease * ease * endY;
+
+          flyingDot.style.transform = `translate(${x - 5}px, ${y - 5}px)`;
+
+          if (p < 1) {
+            requestAnimationFrame(animateDot);
+          } else {
+            // Landing: power-o halo glows
+            flyingDot.style.display = 'none';
+            powerHalo.style.opacity = '1';
+            setTimeout(() => {
+              powerHalo.style.opacity = '0';
+            }, 900);
+          }
+        }
+        requestAnimationFrame(animateDot);
+      }
+    })();
+  </script>
+</body>
+</html>
