@@ -12,7 +12,7 @@ export interface PeerUser {
 export type PeerMatchCallback = (session: ChatSession) => void;
 
 /**
- * Omegle-Style Realtime Campus Matchmaker
+ * Realtime Campus Matchmaker
  * Uses Supabase Realtime across devices + BroadcastChannel across local tabs.
  * NO AI bots. Matches only real human peers.
  */

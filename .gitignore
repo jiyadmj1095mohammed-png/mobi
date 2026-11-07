@@ -33,5 +33,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# legacy folder
-Map/
+# local reference folder
+/Map/

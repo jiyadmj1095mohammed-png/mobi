@@ -128,21 +128,17 @@ export default function RandomChatLobby() {
             </div>
 
             <div className="space-y-1">
-              <h4 className="text-sm font-extrabold text-white">
-                Looking for an Opponent...
+              <h4 className="text-base font-extrabold text-white">
+                Finding Available Campus Peer...
               </h4>
-              <p className="text-xs text-[#E8F876] font-medium animate-pulse">
+              <p className="text-xs text-[#E8F876] font-semibold animate-pulse">
                 {searchStatus}
               </p>
             </div>
 
-            <p className="text-[11px] text-white/50 max-w-xs mx-auto leading-relaxed border-t border-white/10 pt-3">
-              💡 <span className="text-white/80 font-bold">Pro Tip:</span> Open this website in a second tab or incognito window to chat with yourself instantly!
-            </p>
-
             <button
               onClick={handleCancelSearch}
-              className="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10"
+              className="px-6 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-all border border-white/10"
             >
               Cancel Search
             </button>
@@ -151,16 +147,16 @@ export default function RandomChatLobby() {
           <div>
             {wallet.chatPoints === 0 ? (
               <div className="p-4 rounded-2xl bg-[#F4F5F2] border border-black/5 text-xs text-slate-600 space-y-3">
-                <div className="flex items-center gap-1.5 font-extrabold text-[#121417]">
+                <div className="flex items-center gap-1.5 font-black text-[#121417]">
                   <Lock className="w-4 h-4 text-amber-600" />
                   <span>0 Chat Points Remaining</span>
                 </div>
-                <p className="text-[11px] text-slate-500 leading-relaxed">
-                  You need at least 1 Chat Point to start a peer session. Answer 3 quick courtesy questions to claim +3 Chat Points.
+                <p className="text-xs text-slate-600 leading-relaxed font-medium">
+                  You need at least 1 Chat Point to start a peer session. Complete the 3-question civic courtesy quiz to claim +3 Chat Points.
                 </p>
                 <button
                   onClick={() => setShowQuizModal(true)}
-                  className="w-full min-h-[44px] rounded-full bg-[#121417] hover:bg-black text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+                  className="w-full min-h-[44px] rounded-full bg-[#121417] hover:bg-black text-white text-xs font-black flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
                 >
                   <ShieldCheck className="w-4 h-4 text-[#E8F876]" />
                   <span>Take Courtesy Quiz (+3 Points)</span>
@@ -170,17 +166,17 @@ export default function RandomChatLobby() {
               <div className="space-y-3">
                 <button
                   onClick={handleStartSearch}
-                  className="w-full min-h-[48px] rounded-full bg-[#121417] hover:bg-black text-white text-xs sm:text-sm font-extrabold flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
+                  className="w-full min-h-[48px] rounded-full bg-[#121417] hover:bg-black text-white text-sm font-black flex items-center justify-center gap-2 shadow-md transition-all active:scale-95"
                 >
                   <Users2 className="w-4 h-4 text-[#E8F876]" />
-                  <span>Find Campus Peer (Costs 1 Point)</span>
+                  <span>Start Student Peer Dialogue</span>
                 </button>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-500 px-2">
-                  <span>Current balance: {wallet.chatPoints} points</span>
+                <div className="flex items-center justify-between text-xs text-slate-600 font-semibold px-2">
+                  <span>Balance: {wallet.chatPoints} Chat Points</span>
                   <button
                     onClick={() => setShowQuizModal(true)}
-                    className="text-[#121417] font-bold underline hover:text-black"
+                    className="text-[#121417] font-black underline hover:text-black"
                   >
                     Earn More Points (+3)
                   </button>
@@ -192,15 +188,15 @@ export default function RandomChatLobby() {
       </div>
 
       {/* Safety & Guidelines Info */}
-      <div className="p-5 rounded-[24px] bg-[#F8F9F6] border border-black/5 space-y-2 text-xs text-slate-500">
-        <h4 className="font-extrabold text-[#121417] flex items-center gap-1.5">
+      <div className="p-5 rounded-[24px] bg-[#F8F9F6] border border-black/5 space-y-2 text-xs text-slate-600">
+        <h4 className="font-black text-[#121417] flex items-center gap-1.5">
           <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Omegle-Style Anonymous Safety Standards</span>
+          <span>Campus Safety & Community Standards</span>
         </h4>
-        <ul className="list-disc list-inside space-y-1 text-[11px] leading-relaxed">
-          <li>Sessions start only after a real opponent is paired.</li>
-          <li>Never share sensitive passwords, roll numbers, or bank details.</li>
-          <li>Either party can disconnect or report harassment at any time.</li>
+        <ul className="list-disc list-inside space-y-1.5 text-xs font-medium leading-relaxed text-slate-600">
+          <li>Sessions start only when a verified campus peer is connected.</li>
+          <li>Never share passwords, financial details, or sensitive personal data.</li>
+          <li>Either student can disconnect or flag misconduct at any moment.</li>
         </ul>
       </div>
 

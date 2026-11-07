@@ -33,53 +33,12 @@ const DEFAULT_PROFILE: ExtendedProfile = {
 
 const INITIAL_WALLET: UserWallet = {
   userId: "std-001",
-  mobiCoins: 50,
+  mobiCoins: 0,
   chatPoints: 4,
   updatedAt: new Date().toISOString(),
 };
 
-const INITIAL_TRANSACTIONS: WalletTransaction[] = [
-  {
-    id: "tx-001",
-    userId: "std-001",
-    currency: "mobi_coin",
-    amount: 15,
-    action: "earned",
-    description: "Verified Waste Report: BIN-005 cleared",
-    referenceId: "rep-001",
-    createdAt: new Date(Date.now() - 3600000 * 24 * 2).toISOString(),
-  },
-  {
-    id: "tx-002",
-    userId: "std-001",
-    currency: "mobi_coin",
-    amount: 35,
-    action: "earned",
-    description: "Campus Eco Initiative Credit",
-    referenceId: "eco-001",
-    createdAt: new Date(Date.now() - 3600000 * 24 * 5).toISOString(),
-  },
-  {
-    id: "tx-003",
-    userId: "std-001",
-    currency: "chat_point",
-    amount: 3,
-    action: "earned",
-    description: "Civic Quiz Completed",
-    referenceId: "quiz-01",
-    createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-  },
-  {
-    id: "tx-004",
-    userId: "std-001",
-    currency: "chat_point",
-    amount: 1,
-    action: "earned",
-    description: "Campus Quiz Bonus",
-    referenceId: "quiz-02",
-    createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
-  },
-];
+const INITIAL_TRANSACTIONS: WalletTransaction[] = [];
 
 export const INITIAL_BINS: WasteBin[] = [
   { id: "BIN-001", category: "general", locationName: "Main Entrance Gate", pos: [-36, -5.8], condition: "good", verified: true, lastServiced: "Today, 08:00 AM" },
@@ -103,35 +62,7 @@ export const INITIAL_BINS: WasteBin[] = [
   { id: "BIN-019", category: "general", locationName: "Central Circle", pos: [10, -9], condition: "good", verified: true, lastServiced: "Today, 10:00 AM" },
 ];
 
-export const INITIAL_REPORTS: WasteReport[] = [
-  {
-    id: "rep-001",
-    userId: "std-001",
-    userName: "Student",
-    binId: "BIN-005",
-    category: "overflowing",
-    locationName: "Main Block East Quad",
-    description: "Dry waste bin is full after morning classes.",
-    status: "approved",
-    rewardAmount: 15,
-    adminNotes: "Sanitation team cleared. 15 Mobi Coins awarded.",
-    createdAt: new Date(Date.now() - 3600000 * 24 * 2).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 24 * 2 + 1800000).toISOString(),
-  },
-  {
-    id: "rep-002",
-    userId: "std-002",
-    userName: "Alex K",
-    binId: "BIN-018",
-    category: "damaged_bin",
-    locationName: "Playfield Pavilion",
-    description: "Bin lid hinge is loose.",
-    status: "pending",
-    rewardAmount: 15,
-    createdAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-    updatedAt: new Date(Date.now() - 3600000 * 3).toISOString(),
-  },
-];
+export const INITIAL_REPORTS: WasteReport[] = [];
 
 export const ECO_QUIZ_QUESTIONS: EcoQuizQuestion[] = [
   {
@@ -219,9 +150,45 @@ export const CIVIC_QUIZ_QUESTIONS: CivicQuizQuestion[] = [
 
 export const INITIAL_EVENTS: CampusEvent[] = [
   {
+    id: "evt-past-01",
+    title: "MEA Campus Green Marathon & Tree Drive",
+    description: "Annual campus perimeter marathon and 100 native sapling plantation drive across MEA grounds.",
+    department: "Physical Education & Nature Club",
+    club: "Nature Club",
+    date: "Nov 02, 2026",
+    time: "06:30 AM - 10:30 AM",
+    venue: "College Main Ground & Perimeter",
+    fee: 0,
+    organizer: "Nature Club & Sports Dept",
+    registrationDeadline: "Nov 01, 2026",
+    totalSeats: 150,
+    registeredCount: 150,
+    maxCoinDiscount: 0,
+    imageUrl: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&auto=format&fit=crop&q=80",
+    status: "completed",
+  },
+  {
+    id: "evt-past-02",
+    title: "S3 / S5 Academic Orientation & Code Sprint",
+    description: "Hands-on software sprint and introduction to open-source student initiatives and developer tooling.",
+    department: "Computer Science & Engineering",
+    club: "FOSS MEA",
+    date: "Nov 05, 2026",
+    time: "10:00 AM - 04:00 PM",
+    venue: "Main Block Auditorium",
+    fee: 30,
+    organizer: "Dept of CSE",
+    registrationDeadline: "Nov 04, 2026",
+    totalSeats: 120,
+    registeredCount: 120,
+    maxCoinDiscount: 15,
+    imageUrl: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80",
+    status: "completed",
+  },
+  {
     id: "evt-01",
-    title: "INNOVEX 2026 Tech Fest",
-    description: "National engineering symposium featuring robotics competitions, code sprints, and technical workshops.",
+    title: "INNOVEX 2026: National Tech Symposium",
+    description: "Premier inter-college engineering symposium featuring robotics hackathon, algorithmic challenges, and technical paper presentations.",
     department: "Computer Science & Engineering",
     club: "FOSS Chapter",
     date: "Nov 20, 2026",
@@ -231,43 +198,25 @@ export const INITIAL_EVENTS: CampusEvent[] = [
     organizer: "Dept of CSE",
     registrationDeadline: "Nov 18, 2026",
     totalSeats: 250,
-    registeredCount: 148,
+    registeredCount: 84,
     maxCoinDiscount: 25,
     imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=80",
     status: "upcoming",
   },
   {
     id: "evt-02",
-    title: "Campus Tree Plantation Drive",
-    description: "Planting native trees across the college perimeter with the Nature Club. All supplies provided.",
-    department: "General Engineering",
-    club: "Nature Club",
-    date: "Nov 15, 2026",
-    time: "07:30 AM - 11:00 AM",
-    venue: "Near Playfield",
-    fee: 0,
-    organizer: "Nature Club",
-    registrationDeadline: "Nov 14, 2026",
-    totalSeats: 80,
-    registeredCount: 62,
-    maxCoinDiscount: 0,
-    imageUrl: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&auto=format&fit=crop&q=80",
-    status: "upcoming",
-  },
-  {
-    id: "evt-03",
-    title: "Civil CAD & BIM Workshop",
-    description: "Hands-on training session on modern drafting and structural modeling tools in Block C.",
+    title: "Civil CAD, GIS & BIM Modeling Workshop",
+    description: "Hands-on structural drafting and building information modeling lab session in Civil Block CAD Center.",
     department: "Civil Engineering",
-    club: "ASCE Chapter",
+    club: "ASCE Student Chapter",
     date: "Nov 25, 2026",
     time: "10:00 AM - 04:00 PM",
-    venue: "Civil CAD Lab",
+    venue: "Civil CAD Lab, Block C",
     fee: 50,
     organizer: "Civil Eng Association",
     registrationDeadline: "Nov 23, 2026",
-    totalSeats: 45,
-    registeredCount: 31,
+    totalSeats: 50,
+    registeredCount: 22,
     maxCoinDiscount: 20,
     imageUrl: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&auto=format&fit=crop&q=80",
     status: "upcoming",
@@ -277,23 +226,33 @@ export const INITIAL_EVENTS: CampusEvent[] = [
 export const INITIAL_ANNOUNCEMENTS: Announcement[] = [
   {
     id: "ann-01",
-    title: "Campus Bus Schedule Update (SH39)",
-    content: "Additional buses will depart from MEA College Stop at 4:45 PM and 5:30 PM towards Perinthalmanna.",
+    title: "Official Bus Schedule & Route 4 Update (SH39)",
+    content: "Perinthalmanna - Nilambur campus shuttle buses will depart directly from MEA College Stop at 04:45 PM and 05:30 PM.",
     category: "official",
     department: "Transportation Office",
     author: "Transport Coordinator",
     pinned: true,
-    createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
+    createdAt: new Date(Date.now() - 3600000 * 6).toISOString(),
   },
   {
     id: "ann-02",
-    title: "Purified Water Stations Live",
-    content: "5 newly serviced drinking water points are operational across Main Block, Auditorium, and Civil Block.",
+    title: "5 Serviced RO Drinking Water Points Now Live",
+    content: "Purified RO water stations are now online at Main Block Porch, Auditorium Cafeteria, and Civil Department entrance.",
     category: "campaign",
-    department: "Facilities",
-    author: "Campus Operations",
+    department: "Campus Facilities",
+    author: "Operations Desk",
     pinned: false,
-    createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+    createdAt: new Date(Date.now() - 3600000 * 18).toISOString(),
+  },
+  {
+    id: "ann-03",
+    title: "Zero Single-Use Plastic Policy on Campus",
+    content: "All students and staff are requested to utilize the segregated waste bins and campus water points. Single-use plastic cups are prohibited.",
+    category: "official",
+    department: "Campus Sustainability Council",
+    author: "Green Committee",
+    pinned: false,
+    createdAt: new Date(Date.now() - 3600000 * 36).toISOString(),
   },
 ];
 
@@ -311,15 +270,15 @@ export function useMobiStore() {
 
   useEffect(() => {
     try {
-      const savedProfile = localStorage.getItem("mobi_profile_v2");
+      const savedProfile = localStorage.getItem("mobi_profile_v4");
       if (savedProfile) {
         setProfile(JSON.parse(savedProfile));
       }
-      const savedWallet = localStorage.getItem("mobi_wallet");
+      const savedWallet = localStorage.getItem("mobi_wallet_v4");
       if (savedWallet) setWallet(JSON.parse(savedWallet));
-      const savedReports = localStorage.getItem("mobi_reports");
+      const savedReports = localStorage.getItem("mobi_reports_v4");
       if (savedReports) setReports(JSON.parse(savedReports));
-      const savedTransactions = localStorage.getItem("mobi_txs");
+      const savedTransactions = localStorage.getItem("mobi_txs_v4");
       if (savedTransactions) setTransactions(JSON.parse(savedTransactions));
     } catch {
       // ignore
@@ -337,7 +296,7 @@ export function useMobiStore() {
     };
     setProfile(updated);
     try {
-      localStorage.setItem("mobi_profile_v2", JSON.stringify(updated));
+      localStorage.setItem("mobi_profile_v4", JSON.stringify(updated));
     } catch {}
   };
 
@@ -358,7 +317,7 @@ export function useMobiStore() {
     const updated = [newReport, ...reports];
     setReports(updated);
     try {
-      localStorage.setItem("mobi_reports", JSON.stringify(updated));
+      localStorage.setItem("mobi_reports_v4", JSON.stringify(updated));
     } catch {}
     return newReport;
   };
@@ -397,9 +356,9 @@ export function useMobiStore() {
     setTransactions(updatedTxs);
     setReports(updatedReports);
     try {
-      localStorage.setItem("mobi_wallet", JSON.stringify(updatedWallet));
-      localStorage.setItem("mobi_txs", JSON.stringify(updatedTxs));
-      localStorage.setItem("mobi_reports", JSON.stringify(updatedReports));
+      localStorage.setItem("mobi_wallet_v4", JSON.stringify(updatedWallet));
+      localStorage.setItem("mobi_txs_v4", JSON.stringify(updatedTxs));
+      localStorage.setItem("mobi_reports_v4", JSON.stringify(updatedReports));
     } catch {}
   };
 
@@ -461,8 +420,8 @@ export function useMobiStore() {
     setRegistrations([newReg, ...registrations]);
 
     try {
-      localStorage.setItem("mobi_wallet", JSON.stringify(updatedWallet));
-      localStorage.setItem("mobi_txs", JSON.stringify(updatedTxs));
+      localStorage.setItem("mobi_wallet_v4", JSON.stringify(updatedWallet));
+      localStorage.setItem("mobi_txs_v4", JSON.stringify(updatedTxs));
     } catch {}
 
     return { success: true, registration: newReg };
@@ -487,8 +446,8 @@ export function useMobiStore() {
     setWallet(updatedWallet);
     setTransactions([newTx, ...transactions]);
     try {
-      localStorage.setItem("mobi_wallet", JSON.stringify(updatedWallet));
-      localStorage.setItem("mobi_txs", JSON.stringify([newTx, ...transactions]));
+      localStorage.setItem("mobi_wallet_v4", JSON.stringify(updatedWallet));
+      localStorage.setItem("mobi_txs_v4", JSON.stringify([newTx, ...transactions]));
     } catch {}
     return award;
   };
@@ -512,8 +471,8 @@ export function useMobiStore() {
     setWallet(updatedWallet);
     setTransactions([newTx, ...transactions]);
     try {
-      localStorage.setItem("mobi_wallet", JSON.stringify(updatedWallet));
-      localStorage.setItem("mobi_txs", JSON.stringify([newTx, ...transactions]));
+      localStorage.setItem("mobi_wallet_v4", JSON.stringify(updatedWallet));
+      localStorage.setItem("mobi_txs_v4", JSON.stringify([newTx, ...transactions]));
     } catch {}
     return true;
   };

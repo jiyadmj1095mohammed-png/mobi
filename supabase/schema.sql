@@ -24,8 +24,8 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 CREATE TABLE IF NOT EXISTS public.wallets (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
-    mobi_coins INT NOT NULL DEFAULT 45,       -- Earned via Eco reports, spent on canteen & symposiums
-    chat_points INT NOT NULL DEFAULT 10,      -- Daily renewable allowance for peer communication
+    mobi_coins INT NOT NULL DEFAULT 0,        -- Fresh start balance: 0 Mobi Coins
+    chat_points INT NOT NULL DEFAULT 4,       -- Initial allowance for peer testing: 4 Chat Points
     last_points_reset TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

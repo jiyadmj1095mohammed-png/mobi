@@ -1,62 +1,21 @@
 import { useEffect, useRef } from "react";
-import { useThree, useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import * as THREE from "three";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
-import { V2 } from "@/data/campusData";
-
-interface CameraRigProps {
-  viewMode: "3d" | "2d";
-  focusPoint: V2 | null;
-}
-
-export function CameraRig({ viewMode, focusPoint }: CameraRigProps) {
+import { Vector3 } from "three";
+import { V2 } from "@/utils/geometry";
+// Smoothly flies to the focus point; mode 'map' = top-down, '3d' = tilted perspective. User can still orbit/pan/zoom.
+export function CameraRig({ view, focus }: { view: "map" | "3d"; focus: V2 | null }) {
+  const ctl = useRef<any>(null), goal = useRef<{ t: Vector3; p: Vector3 } | null>(null);
   const { camera } = useThree();
-  const controlsRef = useRef<OrbitControlsImpl>(null);
-
-  const targetCamPos = useRef(new THREE.Vector3(0, 95, 85));
-  const targetLookAt = useRef(new THREE.Vector3(0, 0, 10));
-
   useEffect(() => {
-    if (viewMode === "2d") {
-      // 2D top-down orthographic/straight down view
-      targetCamPos.current.set(focusPoint ? focusPoint[0] : 0, 130, focusPoint ? focusPoint[1] + 0.1 : 10.1);
-      targetLookAt.current.set(focusPoint ? focusPoint[0] : 0, 0, focusPoint ? focusPoint[1] : 10);
-    } else {
-      // 3D Isometric View
-      if (focusPoint) {
-        targetCamPos.current.set(focusPoint[0] - 25, 45, focusPoint[1] + 35);
-        targetLookAt.current.set(focusPoint[0], 0, focusPoint[1]);
-      } else {
-        targetCamPos.current.set(0, 95, 85);
-        targetLookAt.current.set(0, 0, 10);
-      }
-    }
-  }, [viewMode, focusPoint]);
-
-  useFrame((_, delta) => {
-    const factor = Math.min(1, delta * 3.5);
-    camera.position.lerp(targetCamPos.current, factor);
-    if (controlsRef.current) {
-      controlsRef.current.target.lerp(targetLookAt.current, factor);
-      controlsRef.current.update();
-    }
+    const t = new Vector3(focus?.[0] ?? 0, 0, focus?.[1] ?? 0), h = focus ? 38 : 95;
+    goal.current = { t, p: t.clone().add(view === "map" ? new Vector3(0, h * 1.4, 0.01) : new Vector3(0, h * 0.8, h * 0.9)) };
+  }, [view, focus]);
+  useFrame((_, dt) => {
+    const g = goal.current; if (!g || !ctl.current) return;
+    const k = 1 - Math.pow(0.002, dt);
+    camera.position.lerp(g.p, k); ctl.current.target.lerp(g.t, k); ctl.current.update();
+    if (camera.position.distanceTo(g.p) < 0.3) goal.current = null;
   });
-
-  return (
-    <OrbitControls
-      ref={controlsRef}
-      enableDamping
-      dampingFactor={0.08}
-      maxPolarAngle={viewMode === "2d" ? 0.05 : Math.PI / 2.2}
-      minPolarAngle={0}
-      minDistance={15}
-      maxDistance={220}
-      screenSpacePanning
-      touches={{
-        ONE: THREE.TOUCH.ROTATE,
-        TWO: THREE.TOUCH.DOLLY_PAN,
-      }}
-    />
-  );
+  return <OrbitControls ref={ctl} makeDefault enableDamping maxPolarAngle={Math.PI / 2.05} minDistance={8} maxDistance={220} />;
 }

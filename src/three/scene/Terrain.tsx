@@ -1,79 +1,21 @@
 import { useMemo } from "react";
-import * as THREE from "three";
-import { CAMPUS_BOUNDARY, PLAY_FIELD, ROADS, NODES, EDGES, V2 } from "@/data/campusData";
-
-function PolygonMesh({ pts, color, yOffset }: { pts: V2[]; color: string; yOffset: number }) {
-  const shape = useMemo(() => {
-    const s = new THREE.Shape();
-    pts.forEach((p, i) => {
-      if (i === 0) s.moveTo(p[0], -p[1]);
-      else s.lineTo(p[0], -p[1]);
-    });
-    return s;
-  }, [pts]);
-
-  return (
-    <mesh rotation-x={-Math.PI / 2} position-y={yOffset} receiveShadow>
-      <shapeGeometry args={[shape]} />
-      <meshStandardMaterial color={color} roughness={0.9} />
-    </mesh>
-  );
+import { Shape } from "three";
+import { boundary, playField, roads, nodes, edges } from "@/data/campusPaths";
+import { V2 } from "@/utils/geometry";
+function Poly({ pts, color, y }: { pts: V2[]; color: string; y: number }) {
+  const s = useMemo(() => { const sh = new Shape(); pts.forEach((p, i) => (i ? sh.lineTo(p[0], -p[1]) : sh.moveTo(p[0], -p[1]))); return sh; }, [pts]);
+  return <mesh rotation-x={-Math.PI / 2} position-y={y} receiveShadow><shapeGeometry args={[s]} /><meshStandardMaterial color={color} roughness={1} /></mesh>;
 }
-
-function RoadStrip({ start, end, width, color, yOffset }: { start: V2; end: V2; width: number; color: string; yOffset: number }) {
-  const length = Math.hypot(end[0] - start[0], end[1] - start[1]);
-  const angle = -Math.atan2(end[1] - start[1], end[0] - start[0]);
-  const midX = (start[0] + end[0]) / 2;
-  const midZ = (start[1] + end[1]) / 2;
-
-  return (
-    <mesh position={[midX, yOffset, midZ]} rotation-y={angle} receiveShadow>
-      <boxGeometry args={[length + width * 0.4, 0.08, width]} />
-      <meshStandardMaterial color={color} roughness={0.8} />
-    </mesh>
-  );
+export function Strip({ a, b, w, color, y }: { a: V2; b: V2; w: number; color: string; y: number }) {
+  const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  return <mesh position={[(a[0] + b[0]) / 2, y, (a[1] + b[1]) / 2]} rotation-y={-Math.atan2(b[1] - a[1], b[0] - a[0])} receiveShadow><boxGeometry args={[len + w * 0.5, 0.06, w]} /><meshStandardMaterial color={color} roughness={0.95} /></mesh>;
 }
-
 export function Terrain() {
-  return (
-    <group>
-      {/* Outer Regional Earth Base */}
-      <mesh rotation-x={-Math.PI / 2} position-y={0} receiveShadow>
-        <planeGeometry args={[500, 500]} />
-        <meshStandardMaterial color="#5C6C42" roughness={1} />
-      </mesh>
-
-      {/* Campus Boundary Green Turf */}
-      <PolygonMesh pts={CAMPUS_BOUNDARY} color="#4F7A3E" yOffset={0.03} />
-
-      {/* College Sports & Playfield Area */}
-      <PolygonMesh pts={PLAY_FIELD} color="#94A346" yOffset={0.05} />
-
-      {/* Vehicular Paved Asphalt Roads (SH39 & Nilambur Road) */}
-      {ROADS.flatMap((road) =>
-        road.pts.slice(1).map((point, idx) => (
-          <RoadStrip
-            key={`${road.name}-${idx}`}
-            start={road.pts[idx]}
-            end={point}
-            width={3.6}
-            color="#2A2E33"
-            yOffset={0.07}
-          />
-        ))
-      )}
-
-      {/* Internal Pedestrian Pathway Network (Traced Footpaths) */}
-      {EDGES.map(([nodeA, nodeB, isConfirmed], idx) => (
-        <RoadStrip
-          key={`edge-${idx}-${nodeA}-${nodeB}`}
-          start={NODES[nodeA]}
-          end={NODES[nodeB]}
-          width={1.6}
-          color={isConfirmed ? "#E7E5E0" : "#D4CEBE"}
-          yOffset={0.09}
-        />
-      ))}
-    </group>
-  );
+  return <>
+    <mesh rotation-x={-Math.PI / 2} receiveShadow><planeGeometry args={[400, 400]} /><meshStandardMaterial color="#7d8f5c" roughness={1} /></mesh>
+    <Poly pts={boundary} color="#6fa24a" y={0.02} />
+    <Poly pts={playField} color="#b5bb62" y={0.04} />
+    {roads.flatMap((r) => r.pts.slice(1).map((p, i) => <Strip key={r.name + i} a={r.pts[i]} b={p} w={3.2} color="#3f3f46" y={0.08} />))}
+    {edges.map(([a, b, ok]) => <Strip key={a + b} a={nodes[a]} b={nodes[b]} w={1.3} color={ok ? "#d6d3d1" : "#c9b79c"} y={0.1} />)}
+  </>;
 }
