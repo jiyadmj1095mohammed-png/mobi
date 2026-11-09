@@ -165,27 +165,6 @@ export default function MonochromeLandingPage() {
 
         {/* Hero Content */}
         <div className="relative z-10 max-w-5xl mx-auto space-y-6">
-          {/* Avatar Row */}
-          <motion.div
-            {...fadeUp(0.1)}
-            className="inline-flex items-center gap-3 liquid-glass px-4 py-1.5 rounded-full"
-          >
-            <div className="flex -space-x-2">
-              <div className="w-7 h-7 rounded-full bg-neutral-800 border-2 border-black flex items-center justify-center text-[10px] font-bold">
-                M
-              </div>
-              <div className="w-7 h-7 rounded-full bg-neutral-700 border-2 border-black flex items-center justify-center text-[10px] font-bold">
-                E
-              </div>
-              <div className="w-7 h-7 rounded-full bg-neutral-600 border-2 border-black flex items-center justify-center text-[10px] font-bold">
-                A
-              </div>
-            </div>
-            <span className="text-xs text-white/70 font-medium">
-              7,000+ students already connected across campus
-            </span>
-          </motion.div>
-
           {/* Heading with Serif Italic Accent */}
           <motion.h1
             {...fadeUp(0.2)}
