@@ -19,10 +19,10 @@ export default function MobiEventsPage() {
             MOBI EVENTS
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#121417] mt-0.5">
-            Symposiums & Workshops
+            Events
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Register for campus technical symposiums and apply Mobi Coins for fee discounts.
+            Register for campus events and apply Mobi Coins for fee discounts.
           </p>
         </div>
 

@@ -241,7 +241,7 @@ export default function StudentDashboardPage() {
               </div>
               <div>
                 <h4 className="text-sm font-extrabold text-[#121417]">
-                  Symposiums & Festivals
+                  Campus Events
                 </h4>
                 <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
                   Redeem Mobi Coins for up to ₹100 discount on KAIZEN & MECHSURGE passes.
@@ -276,7 +276,7 @@ export default function StudentDashboardPage() {
                 <GraduationCap className="w-4 h-4" />
               </div>
               <div>
-                <span className="text-xs font-extrabold text-[#121417] block">Symposiums</span>
+                <span className="text-xs font-extrabold text-[#121417] block">Events</span>
                 <span className="text-[10px] text-slate-400">4 upcoming</span>
               </div>
             </Link>
