@@ -13,8 +13,7 @@ import {
   Compass,
   ArrowUpRight,
   MoreVertical,
-  BarChart2,
-  Users2,
+    Users2,
   GraduationCap,
   HelpCircle,
   FolderKanban,
@@ -30,19 +29,8 @@ import {
 
 export default function StudentDashboardPage() {
   const { profile, wallet } = useMobiStore();
-  const [activeTab, setActiveTab] = useState("Overview");
   const [isReportOpen, setIsReportOpen] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
-
-  const TABS = [
-    { id: "Overview", label: "Overview", href: "/app" },
-    { id: "Map", label: "Campus Map", href: "/app/map" },
-    { id: "Eco", label: "MOBI ECO", href: "/app/eco" },
-    { id: "Events", label: "Events", href: "/app/events" },
-    { id: "Connect", label: "Connect", href: "/app/connect" },
-    { id: "Wallet", label: "Wallet", href: "/app/wallet" },
-    { id: "Notices", label: "Noticeboard", href: "/app/campus-connect" },
-  ];
 
   const FAQS = [
     {
@@ -91,26 +79,7 @@ export default function StudentDashboardPage() {
         </div>
       </div>
 
-      {/* 2. Sub-Navigation Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
-        {TABS.map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <Link
-              key={tab.id}
-              href={tab.href}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-full font-bold whitespace-nowrap transition-all ${
-                isActive
-                  ? "bg-[#121417] text-white shadow-sm"
-                  : "text-slate-600 hover:text-[#121417] hover:bg-[#F4F5F2]"
-              }`}
-            >
-              {tab.label}
-            </Link>
-          );
-        })}
-      </div>
+
 
       {/* 3. Top Metrics Row (3 Distinct Bento Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -238,84 +207,6 @@ export default function StudentDashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
         {/* Left 8 Columns */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Activity Statistics Card with Custom Dual-Pill Bar Chart */}
-          <div className="p-6 rounded-[32px] bg-[#F8F9F6] border border-black/5 space-y-6 shadow-sm">
-            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-              <div className="flex items-center gap-2">
-                <BarChart2 className="w-4 h-4 text-slate-700" />
-                <h3 className="text-sm sm:text-base font-extrabold text-[#121417]">
-                  Campus Engagement
-                </h3>
-                <div className="flex items-center gap-3 ml-4 text-[11px] text-slate-500 font-medium">
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#121417]" />
-                    Eco Reports
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#E8F876]" />
-                    Events & Chats
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-xs font-bold text-slate-600 bg-white px-3 py-1.5 rounded-full border border-black/5 self-start sm:self-auto shadow-sm">
-                Fall Semester 2026 ⌄
-              </div>
-            </div>
-
-            {/* Dual Pill Bars Chart */}
-            <div className="pt-4 flex items-end justify-between gap-2 sm:gap-4 h-48 border-b border-slate-200/60 pb-3">
-              {[
-                { day: "Mon", topH: "65%", botH: "30%", topBadge: null, botBadge: null },
-                { day: "Tue", topH: "50%", botH: "25%", topBadge: null, botBadge: null },
-                { day: "Wed", topH: "80%", botH: "35%", topBadge: null, botBadge: null },
-                { day: "Thu", topH: "0%", botH: "0%", topBadge: null, botBadge: null, isDotted: true },
-                { day: "Fri", topH: "90%", botH: "45%", topBadge: "87%", botBadge: "32%" },
-                { day: "Sat", topH: "0%", botH: "0%", topBadge: null, botBadge: null, isDotted: true },
-                { day: "Sun", topH: "55%", botH: "35%", topBadge: null, botBadge: null },
-                { day: "Today", topH: "70%", botH: "40%", topBadge: null, botBadge: null },
-              ].map((bar, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center h-full justify-end gap-2 group cursor-pointer">
-                  {bar.isDotted ? (
-                    <div className="w-7 sm:w-8 h-36 rounded-full border-2 border-dashed border-slate-300 flex items-center justify-center">
-                      <span className="w-2 h-2 rounded-full bg-slate-300" />
-                    </div>
-                  ) : (
-                    <div className="relative w-7 sm:w-8 h-full flex flex-col justify-end items-center group-hover:scale-105 transition-transform">
-                      {bar.topBadge && (
-                        <span className="absolute -top-6 text-[10px] font-bold bg-[#121417] text-white px-1.5 py-0.5 rounded-full">
-                          {bar.topBadge}
-                        </span>
-                      )}
-                      {bar.botBadge && (
-                        <span className="absolute bottom-16 text-[10px] font-bold bg-[#E8F876] text-[#121417] px-1.5 py-0.5 rounded-full z-10 shadow-sm">
-                          {bar.botBadge}
-                        </span>
-                      )}
-
-                      {/* Black Top Capsule */}
-                      <div
-                        className="w-full bg-[#121417] rounded-full flex flex-col justify-end items-center pb-1 transition-all"
-                        style={{ height: bar.topH }}
-                      >
-                        <span className="w-2 h-2 rounded-full bg-white mb-1" />
-                      </div>
-
-                      {/* Pale Citron Bottom Capsule */}
-                      <div
-                        className="w-full bg-[#E8F876] rounded-full -mt-3 flex items-center justify-center transition-all shadow-sm"
-                        style={{ height: bar.botH }}
-                      >
-                        <span className="w-2 h-2 rounded-full bg-[#121417]" />
-                      </div>
-                    </div>
-                  )}
-                  <span className="text-[10px] text-slate-500 font-semibold">{bar.day}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Quick Feature Spotlight Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Link
