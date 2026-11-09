@@ -1,52 +1,38 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sparkles, ShieldCheck, Terminal, Compass } from "lucide-react";
+import { ArrowRight, Leaf, Sparkles } from "lucide-react";
 
-const QUOTES = [
-  "Made by Students. For Students.",
-  "One Campus. One Community. A Better Tomorrow.",
-  "Building sustainable cleanliness at MEA Engineering College.",
-  "Civic courtesy is the foundation of digital community.",
-];
-
-const TELEMETRY_CODES = [
-  "MEA-NODE-8492 // PERINTHALMANNA",
-  "GEO-GROUND-TRUTH: 11.0248° N, 76.2165° E",
-  "19 CAMPUS WASTE SENSORS: ONLINE",
-  "ANONYMOUS CIVIC PIPELINE: ENCRYPTED",
-  "MOBI COINS REWARD LEDGER: READY",
+const MESSAGES = [
+  "Connecting you to campus life.",
+  "Preparing your sustainable campus tools.",
+  "Bringing your community into focus.",
 ];
 
 export default function CampusLoadingScreen({ onComplete }: { onComplete?: () => void }) {
   const [progress, setProgress] = useState(0);
-  const [quoteIndex, setQuoteIndex] = useState(0);
-  const [codeIndex, setCodeIndex] = useState(0);
+  const [messageIndex, setMessageIndex] = useState(0);
   const [isDismissing, setIsDismissing] = useState(false);
 
   useEffect(() => {
-    // 3-second loader timer (3000ms)
-    const totalDuration = 3000;
-    const intervalTime = 30;
+    const totalDuration = 5000;
+    const intervalTime = 25;
     const step = 100 / (totalDuration / intervalTime);
 
-    const quoteTimer = setInterval(() => {
-      setQuoteIndex((prev) => (prev + 1) % QUOTES.length);
-      setCodeIndex((prev) => (prev + 1) % TELEMETRY_CODES.length);
-    }, 1000);
+    const messageTimer = window.setInterval(() => {
+      setMessageIndex((current) => (current + 1) % MESSAGES.length);
+    }, 850);
 
-    const progressTimer = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + step;
+    const progressTimer = window.setInterval(() => {
+      setProgress((current) => {
+        const next = current + step;
         if (next >= 100) {
-          clearInterval(progressTimer);
-          clearInterval(quoteTimer);
-          setTimeout(() => {
+          window.clearInterval(progressTimer);
+          window.clearInterval(messageTimer);
+          window.setTimeout(() => {
             setIsDismissing(true);
-            setTimeout(() => {
-              if (onComplete) onComplete();
-            }, 400);
-          }, 150);
+            window.setTimeout(() => onComplete?.(), 350);
+          }, 120);
           return 100;
         }
         return next;
@@ -54,84 +40,91 @@ export default function CampusLoadingScreen({ onComplete }: { onComplete?: () =>
     }, intervalTime);
 
     return () => {
-      clearInterval(progressTimer);
-      clearInterval(quoteTimer);
+      window.clearInterval(progressTimer);
+      window.clearInterval(messageTimer);
     };
   }, [onComplete]);
 
+  const skip = () => {
+    setIsDismissing(true);
+    window.setTimeout(() => onComplete?.(), 250);
+  };
+
+  const percentage = Math.min(100, Math.round(progress));
+
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-[#0A0C0E] text-white flex flex-col items-center justify-between p-6 sm:p-10 transition-opacity duration-400 font-sans ${
-        isDismissing ? "opacity-0 pointer-events-none" : "opacity-100"
+      className={`fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black p-5 font-sans transition-opacity duration-300 sm:p-8 ${
+        isDismissing ? "pointer-events-none opacity-0" : "opacity-100"
       }`}
     >
-      {/* Top Header Badge */}
-      <div className="w-full max-w-md flex items-center justify-between text-xs text-white/50 pt-4">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-[#E8F876] text-[#121417] flex items-center justify-center font-bold text-xs">
-            ✦
-          </div>
-          <span className="font-bold tracking-wider text-white">MOBI</span>
-          <span className="text-[10px] text-white/40">MEA FUTURE CAMPUS</span>
-        </div>
-        <div className="font-mono text-[10px] text-[#E8F876] tracking-widest bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-          SECURE PROTOCOL 2026
-        </div>
-      </div>
+      <div className="absolute -left-20 top-12 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -bottom-24 -right-12 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.045)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
-      {/* Center Cinematic Display */}
-      <div className="w-full max-w-lg text-center space-y-6 my-auto px-4">
-        {/* Concentric Pulsing Ring */}
-        <div className="relative w-20 h-20 mx-auto flex items-center justify-center">
-          <div className="absolute inset-0 rounded-full border border-[#E8F876]/30 animate-ping opacity-30" />
-          <div className="w-16 h-16 rounded-full border-2 border-white/20 flex items-center justify-center">
-            <div className="w-8 h-8 rounded-full bg-[#E8F876] flex items-center justify-center text-[#121417] font-black text-xs shadow-[0_0_20px_rgba(232,248,118,0.5)]">
-              ✦
+      <main className="relative w-full max-w-[500px] overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.04] p-6 shadow-[0_28px_80px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:p-9">
+        <div className="absolute right-0 top-0 h-32 w-32 rounded-bl-[100px] bg-white/[0.04]" />
+
+        <header className="relative flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-white text-black shadow-sm">
+              <Leaf className="h-5 w-5" aria-hidden="true" />
+            </div>
+            <div>
+              <p className="text-sm font-extrabold tracking-tight text-white">MOBI</p>
+              <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">Future campus</p>
             </div>
           </div>
-        </div>
+          <div className="flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1.5 text-[10px] font-bold text-white/60">
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+            MEA College
+          </div>
+        </header>
 
-        {/* Dynamic Rotating Campus Quote */}
-        <div className="min-h-[60px] flex items-center justify-center">
-          <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white leading-snug transition-all duration-300">
-            &ldquo;{QUOTES[quoteIndex]}&rdquo;
-          </h2>
-        </div>
+        <section className="relative py-12 text-center sm:py-14" aria-live="polite">
+          <div className="relative mx-auto mb-8 flex h-28 w-28 items-center justify-center">
+            <div className="absolute inset-0 rounded-full border border-white/15" />
+            <div className="absolute inset-3 animate-[spin_12s_linear_infinite] rounded-full border border-dashed border-white/30" />
+            <span className="absolute -right-0.5 top-5 h-3 w-3 rounded-full bg-white shadow-[0_0_0_5px_rgba(255,255,255,0.12)]" />
+            <span className="absolute bottom-4 left-1 h-2.5 w-2.5 rounded-full bg-white/50" />
+            <div className="flex h-16 w-16 items-center justify-center rounded-[24px] bg-white/10 text-white shadow-sm">
+              <Sparkles className="h-7 w-7" aria-hidden="true" />
+            </div>
+          </div>
 
-        {/* Live Campus Telemetry Code */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-white/10 text-[11px] font-mono text-[#E8F876] shadow-sm">
-          <Terminal className="w-3.5 h-3.5 text-[#E8F876]" />
-          <span>[{TELEMETRY_CODES[codeIndex]}]</span>
-        </div>
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-white/45">Welcome to MOBI</p>
+          <h1 className="mx-auto max-w-sm text-3xl font-extrabold tracking-tight text-white sm:text-[34px]">
+            Your campus, ready when you are.
+          </h1>
+          <p className="mx-auto mt-4 min-h-5 max-w-xs text-sm font-medium leading-relaxed text-white/55 transition-all">
+            {MESSAGES[messageIndex]}
+          </p>
+        </section>
 
-        {/* 3-Second Progress Bar */}
-        <div className="w-full max-w-xs mx-auto space-y-2 pt-2">
-          <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden p-0.5">
+        <div className="relative">
+          <div className="mb-2.5 flex items-center justify-between text-[11px] font-bold">
+            <span className="text-white/50">Setting things up</span>
+            <span className="text-white">{percentage}%</span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-white/10 p-[3px]">
             <div
-              className="h-full bg-gradient-to-r from-[#E8F876] to-white rounded-full transition-all duration-75 ease-out shadow-[0_0_12px_rgba(232,248,118,0.8)]"
-              style={{ width: `${Math.min(100, Math.round(progress))}%` }}
+              className="h-full rounded-full bg-white transition-[width] duration-75 ease-out"
+              style={{ width: `${percentage}%` }}
             />
           </div>
-          <div className="flex justify-between text-[10px] font-mono text-white/40">
-            <span>INITIALIZING CAMPUS ENGINE</span>
-            <span>{Math.min(100, Math.round(progress))}%</span>
-          </div>
         </div>
-      </div>
 
-      {/* Footer Info */}
-      <div className="w-full max-w-md flex items-center justify-between text-[11px] text-white/40 pb-4">
-        <span>MEA Engineering College · Perinthalmanna</span>
-        <button
-          onClick={() => {
-            setIsDismissing(true);
-            if (onComplete) onComplete();
-          }}
-          className="text-xs text-white/60 hover:text-white underline"
-        >
-          Skip Intro →
-        </button>
-      </div>
+        <footer className="relative mt-7 flex items-center justify-between border-t border-white/10 pt-5">
+          <span className="text-[11px] font-medium text-white/45">MEA Engineering College</span>
+          <button
+            type="button"
+            onClick={skip}
+            className="inline-flex items-center gap-1 text-xs font-bold text-white transition-colors hover:text-white/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+          >
+            Continue <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </button>
+        </footer>
+      </main>
     </div>
   );
 }

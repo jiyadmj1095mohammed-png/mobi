@@ -72,11 +72,213 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background-color: #B8C4B8;
-  color: #121417;
+  background-color: #000000;
+  color: #ffffff;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Application shell: liquid glass styling is deliberately scoped away from the landing page. */
+.mobi-app-frame {
+  background: rgba(8, 8, 8, 0.82);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.mobi-app-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.1), transparent 24%, transparent 72%, rgba(255, 255, 255, 0.035));
+  z-index: 0;
+}
+
+.mobi-app-frame > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mobi-brand-mark {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 8px 20px rgba(0, 0, 0, 0.18);
+}
+
+.mobi-brand-mark svg {
+  filter: drop-shadow(0 1px 5px rgba(255, 255, 255, 0.2));
+}
+
+.mobi-app-content {
+  color: #ffffff;
+}
+
+.mobi-glass-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.045)) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 18px 38px rgba(0, 0, 0, 0.18) !important;
+  backdrop-filter: blur(20px) saturate(135%);
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+}
+
+.mobi-glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.14), transparent 34%);
+}
+
+.mobi-glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mobi-primary-action {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.19), rgba(255, 255, 255, 0.07)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 26px rgba(0, 0, 0, 0.22) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.mobi-primary-action:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.mobi-app :is(
+  [class*="bg-white"],
+  [class*="bg-[#F"],
+  [class*="bg-[#EAF"],
+  [class*="bg-[#EDF"],
+  [class*="bg-[#EEF"],
+  [class*="bg-slate-50"],
+  [class*="bg-slate-100"],
+  [class*="bg-slate-200"],
+  [class*="bg-amber-50"],
+  [class*="bg-amber-100"],
+  [class*="bg-emerald-50"],
+  [class*="bg-emerald-100"],
+  [class*="bg-red-50"],
+  [class*="bg-red-100"],
+  [class*="bg-purple-50"],
+  [class*="bg-purple-100"],
+  [class*="bg-sky-50"],
+  [class*="bg-sky-100"]
+):not(.mobi-app-frame, .mobi-nav-active, .mobi-light-action) {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.16) !important;
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+}
+
+.mobi-app [class*="bg-[#E8F876]"] {
+  background-color: rgba(255, 255, 255, 0.11) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 12px 32px rgba(0, 0, 0, 0.16) !important;
+}
+
+.mobi-app [class*="text-[#121417]"],
+.mobi-app [class*="text-emerald-950"] {
+  color: #ffffff !important;
+}
+
+.mobi-app [class*="text-slate-"],
+.mobi-app [class*="text-emerald-8"],
+.mobi-app [class*="text-amber-8"],
+.mobi-app [class*="text-purple-8"],
+.mobi-app [class*="text-sky-8"] {
+  color: rgba(255, 255, 255, 0.74) !important;
+}
+
+.mobi-app [class*="text-slate-4"],
+.mobi-app [class*="text-slate-5"],
+.mobi-app [class*="text-slate-6"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.mobi-app [class*="text-black"] {
+  color: #ffffff !important;
+}
+
+.mobi-app .mobi-nav-active {
+  color: #000000 !important;
+}
+
+.mobi-app .mobi-light-action {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  color: #000000 !important;
+}
+
+.mobi-app [class*="text-emerald-"] { color: #80e5bd !important; }
+.mobi-app [class*="text-purple-"] { color: #d9adff !important; }
+.mobi-app [class*="text-sky-"] { color: #9bdcff !important; }
+.mobi-app [class*="text-amber-"] { color: #ffd27c !important; }
+.mobi-app [class*="text-red-"] { color: #ff9f9f !important; }
+.mobi-app [class*="text-orange-"] { color: #ffbd82 !important; }
+.mobi-app [class*="text-indigo-"] { color: #aebdff !important; }
+.mobi-app [class*="text-[#06251F]"] { color: #ffffff !important; }
+
+.mobi-app [class*="border-black"],
+.mobi-app [class*="border-slate-"] {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.mobi-app input,
+.mobi-app select,
+.mobi-app textarea {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  caret-color: #ffffff;
+}
+
+.mobi-app input::placeholder,
+.mobi-app textarea::placeholder {
+  color: rgba(255, 255, 255, 0.46) !important;
+}
+
+.mobi-app .liquid-glass,
+.mobi-app [class*="rounded-["].border {
+  background-image: linear-gradient(145deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0.035));
+}
+
+.mobi-app button:not([class*="bg-[#E8F876]"]):not([class*="bg-white"]) {
+  transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.mobi-app :is(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobi-app *,
+  .mobi-app *::before,
+  .mobi-app *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Accent components stay glass, with the same high-contrast type as the rest of the app. */
+.mobi-app [class*="bg-[#E8F876]"][class*="text-[#121417]"],
+.mobi-app [class*="bg-[#E8F876]"] [class*="text-[#121417]"],
+.mobi-app [class*="bg-[#E8F876]"] [class*="text-slate-"] {
+  color: #ffffff !important;
+}
+
+.mobi-app .mobi-glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.045)) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 18px 38px rgba(0, 0, 0, 0.18) !important;
 }
 
 /* Custom minimal scrollbar */

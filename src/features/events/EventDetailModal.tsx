@@ -4,6 +4,8 @@ import { useState } from "react";
 import confetti from "canvas-confetti";
 import { CampusEvent, EventRegistration } from "@/types/database";
 import { useMobiStore } from "@/lib/state";
+import { isSupabaseConfigured, supabase } from "@/lib/supabase";
+import EmailVerificationGate from "./EmailVerificationGate";
 import { X, Calendar, Clock, MapPin, Coins, Ticket, AlertCircle } from "lucide-react";
 
 interface EventDetailModalProps {
@@ -16,6 +18,7 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
   const [coinsToUse, setCoinsToUse] = useState<number>(0);
   const [confirmedReg, setConfirmedReg] = useState<EventRegistration | null>(null);
   const [error, setError] = useState<string>("");
+  const [showVerification, setShowVerification] = useState(false);
 
   if (!event) return null;
 
@@ -23,7 +26,7 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
   const discountAmount = coinsToUse;
   const finalPrice = Math.max(0, event.fee - discountAmount);
 
-  const handleRegister = () => {
+  const completeRegistration = () => {
     const res = registerForEvent(event.id, coinsToUse);
     if (res.success && res.registration) {
       setConfirmedReg(res.registration);
@@ -34,6 +37,26 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
       });
     } else {
       setError(res.message || "Failed to process registration");
+    }
+  };
+
+  const handleRegister = async () => {
+    setError("");
+    if (!isSupabaseConfigured) {
+      setShowVerification(true);
+      return;
+    }
+
+    try {
+      const { data, error: authError } = await supabase.auth.getUser();
+      if (authError || !data.user?.email_confirmed_at) {
+        setShowVerification(true);
+        return;
+      }
+
+      completeRegistration();
+    } catch {
+      setShowVerification(true);
     }
   };
 
@@ -169,6 +192,15 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
           </div>
         )}
       </div>
+      {showVerification && (
+        <EmailVerificationGate
+          onClose={() => setShowVerification(false)}
+          onVerified={() => {
+            setShowVerification(false);
+            completeRegistration();
+          }}
+        />
+      )}
     </div>
   );
 }

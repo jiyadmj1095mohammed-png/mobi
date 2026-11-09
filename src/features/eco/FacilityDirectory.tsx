@@ -31,7 +31,7 @@ export default function FacilityDirectory() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search facility name, water, restroom..."
-            className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200  bg-white  text-xs text-slate-800  focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
@@ -49,7 +49,7 @@ export default function FacilityDirectory() {
               className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all ${
                 category === cat.id
                   ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400"
+                  : "bg-white  border border-slate-200  text-slate-600 "
               }`}
             >
               {cat.label}
@@ -67,7 +67,7 @@ export default function FacilityDirectory() {
           return (
             <div
               key={fac.id}
-              className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3"
+              className="p-4 rounded-2xl bg-white  border border-slate-200  shadow-sm space-y-3"
             >
               <div className="flex items-center justify-between">
                 <span
@@ -80,8 +80,8 @@ export default function FacilityDirectory() {
                 <span
                   className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
                     isConfirmed
-                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
-                      : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"
+                      ? "bg-emerald-100 text-emerald-800  "
+                      : "bg-amber-100 text-amber-800  "
                   }`}
                 >
                   {isConfirmed ? (
@@ -99,7 +99,7 @@ export default function FacilityDirectory() {
               </div>
 
               <div>
-                <h4 className="text-sm font-semibold text-slate-800 dark:text-slate-100">
+                <h4 className="text-sm font-semibold text-slate-800 ">
                   {fac.name}
                 </h4>
                 <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
@@ -111,8 +111,8 @@ export default function FacilityDirectory() {
               <div
                 className={`p-2.5 rounded-xl text-[11px] leading-relaxed ${
                   isConfirmed
-                    ? "bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-300"
-                    : "bg-amber-50 dark:bg-amber-950/30 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800/40"
+                    ? "bg-slate-50  text-slate-600 "
+                    : "bg-amber-50  text-amber-900  border border-amber-200 "
                 }`}
               >
                 {fac.note}
