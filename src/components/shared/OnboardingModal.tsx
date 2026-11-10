@@ -34,30 +34,30 @@ export default function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121417]/60 backdrop-blur-md animate-fadeIn">
-      <div className="w-full max-w-md bg-white rounded-[32px] p-7 sm:p-8 shadow-2xl border border-black/5 space-y-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn font-sans">
+      <div className="w-full max-w-md bg-[#FAF3E0] rounded-2xl p-7 sm:p-8 shadow-[8px_8px_0px_#000] border-[2.5px] border-black space-y-6">
         <div className="space-y-2 text-center">
-          <div className="w-12 h-12 mx-auto rounded-2xl bg-[#E8F876] text-[#121417] flex items-center justify-center font-bold text-lg">
+          <div className="w-12 h-12 mx-auto rounded-2xl bg-[#EEA827] text-black border-2 border-black flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_#000]">
             ✦
           </div>
-          <h2 className="text-2xl font-extrabold text-[#121417] tracking-tight">
+          <h2 className="text-2xl font-black text-black tracking-tight">
             Welcome to MOBI
           </h2>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto">
-            Please enter your name and department to personalize your campus dashboard.
+          <p className="text-xs font-bold text-stone-600 max-w-xs mx-auto">
+            Please enter your name and department to personalize your MEA campus ecosystem.
           </p>
         </div>
 
         {error && (
-          <div className="p-3 rounded-2xl bg-red-50 text-red-600 text-xs text-center font-medium">
+          <div className="p-3 rounded-xl bg-[#D84F2A] text-white text-xs text-center font-black border-2 border-black">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <User className="w-3.5 h-3.5 text-slate-400" />
+            <label className="text-xs font-black text-black uppercase flex items-center gap-1.5">
+              <User className="w-3.5 h-3.5 text-black" />
               <span>Full Name</span>
             </label>
             <input
@@ -69,20 +69,20 @@ export default function OnboardingModal() {
                 setName(e.target.value);
                 if (error) setError("");
               }}
-              placeholder="e.g. Alex Mohammed"
-              className="w-full px-4 py-3 rounded-2xl bg-[#F4F5F2] text-sm text-[#121417] font-medium outline-none focus:ring-2 focus:ring-[#121417] border border-transparent"
+              placeholder="e.g. Aisha Rahman"
+              className="w-full px-4 py-2.5 rounded-xl bg-white text-xs font-black text-black outline-none border-2 border-black shadow-[2px_2px_0px_#000]"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold text-slate-700 flex items-center gap-1.5">
-              <Building2 className="w-3.5 h-3.5 text-slate-400" />
+            <label className="text-xs font-black text-black uppercase flex items-center gap-1.5">
+              <Building2 className="w-3.5 h-3.5 text-black" />
               <span>Department</span>
             </label>
             <select
               value={dept}
               onChange={(e) => setDept(e.target.value)}
-              className="w-full px-4 py-3 rounded-2xl bg-[#F4F5F2] text-sm text-[#121417] font-medium outline-none focus:ring-2 focus:ring-[#121417] border border-transparent"
+              className="w-full px-4 py-2.5 rounded-xl bg-white text-xs font-black text-black outline-none border-2 border-black shadow-[2px_2px_0px_#000]"
             >
               {DEPARTMENTS.map((d) => (
                 <option key={d} value={d}>
@@ -94,9 +94,9 @@ export default function OnboardingModal() {
 
           <button
             type="submit"
-            className="w-full min-h-[48px] rounded-2xl bg-[#121417] hover:bg-black text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md"
+            className="brutal-btn w-full min-h-[44px] rounded-xl bg-[#EEA827] hover:bg-[#e29d1c] text-black text-xs font-black uppercase flex items-center justify-center gap-2 shadow-[3px_3px_0px_#000] mt-2"
           >
-            <span>Continue to Dashboard</span>
+            <span>Enter Campus</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>

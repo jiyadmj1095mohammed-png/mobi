@@ -14,25 +14,25 @@ export default function TransactionHistory() {
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-sans">
       <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-        <h3 className="text-sm font-bold text-[#121417]">
-          Transaction Ledger
+        <h3 className="text-base font-black text-black">
+          Transaction Ledger History
         </h3>
 
-        <div className="flex items-center gap-1.5 text-xs">
+        <div className="flex items-center gap-2 text-xs">
           {[
-            { id: "all", label: "All" },
-            { id: "mobi_coin", label: "Coins" },
-            { id: "chat_point", label: "Points" },
+            { id: "all", label: "All Records" },
+            { id: "mobi_coin", label: "Mobi Coins" },
+            { id: "chat_point", label: "Chat Points" },
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id as any)}
-              className={`px-3 py-1.5 rounded-full font-semibold transition-all ${
+              className={`brutal-btn px-3 py-1.5 rounded-lg font-black transition-all ${
                 filter === tab.id
-                  ? "bg-[#121417] text-white"
-                  : "bg-[#F4F5F2] text-slate-600 hover:text-black"
+                  ? "bg-[#EEA827] text-black border-2 border-black"
+                  : "bg-[#FAF3E0] text-black border-2 border-black"
               }`}
             >
               {tab.label}
@@ -41,20 +41,20 @@ export default function TransactionHistory() {
         </div>
       </div>
 
-      <div className="rounded-[28px] bg-[#F8F9F6] border border-black/5 overflow-hidden divide-y divide-slate-200/50">
+      <div className="rounded-2xl bg-[#FAF3E0] border-[2.5px] border-black shadow-[4px_4px_0px_#000] overflow-hidden divide-y-2 divide-black/10">
         {filtered.length > 0 ? (
           filtered.map((tx) => {
             const isMobi = tx.currency === "mobi_coin";
             const isEarned = tx.action === "earned" || tx.action === "refunded";
 
             return (
-              <div key={tx.id} className="p-4 flex items-center justify-between gap-3 hover:bg-slate-100/50 transition-colors">
+              <div key={tx.id} className="p-4 flex items-center justify-between gap-3 hover:bg-white/60 transition-colors">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`w-9 h-9 rounded-2xl flex items-center justify-center shrink-0 ${
+                    className={`w-9 h-9 rounded-xl border-2 border-black flex items-center justify-center shrink-0 shadow-[1.5px_1.5px_0px_#000] ${
                       isMobi
-                        ? "bg-white text-slate-900 shadow-sm"
-                        : "bg-[#E8F876] text-black shadow-sm"
+                        ? "bg-[#1D838F] text-white"
+                        : "bg-[#EEA827] text-black"
                     }`}
                   >
                     {isEarned ? (
@@ -63,34 +63,26 @@ export default function TransactionHistory() {
                       <ArrowUpRight className="w-4 h-4" />
                     )}
                   </div>
-
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-[#121417]">
+                    <div className="text-xs sm:text-sm font-black text-black">
                       {tx.description}
                     </div>
-                    <div className="text-[11px] text-slate-400 flex items-center gap-2 mt-0.5">
-                      <span>{new Date(tx.createdAt).toLocaleDateString()}</span>
-                      <span>·</span>
-                      <span className="font-mono text-[10px]">{tx.id}</span>
+                    <div className="text-[10px] font-bold text-stone-500 font-mono mt-0.5">
+                      {tx.id} • {tx.createdAt}
                     </div>
                   </div>
                 </div>
 
                 <div className="text-right shrink-0">
                   <div
-                    className={`text-sm font-extrabold flex items-center justify-end gap-1 ${
-                      isEarned ? "text-[#121417]" : "text-slate-500"
+                    className={`text-xs sm:text-sm font-black ${
+                      isEarned ? "text-[#1D838F]" : "text-[#D84F2A]"
                     }`}
                   >
-                    <span>
-                      {isEarned ? "+" : "-"}
-                      {tx.amount}
-                    </span>
-                    <span className="text-[11px] font-semibold text-slate-400">
-                      {isMobi ? "Coins" : "Pts"}
-                    </span>
+                    {isEarned ? "+" : "-"}
+                    {tx.amount} {isMobi ? "Coins" : "Pts"}
                   </div>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">
+                  <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded bg-white border border-black inline-block mt-0.5">
                     {tx.action}
                   </span>
                 </div>
@@ -98,8 +90,8 @@ export default function TransactionHistory() {
             );
           })
         ) : (
-          <div className="p-8 text-center text-xs text-slate-400">
-            No transactions found.
+          <div className="p-6 text-center text-xs font-bold text-stone-500">
+            No transactions found for this filter.
           </div>
         )}
       </div>

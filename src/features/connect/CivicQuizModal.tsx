@@ -3,7 +3,7 @@
 import { useState } from "react";
 import confetti from "canvas-confetti";
 import { CIVIC_QUIZ_QUESTIONS, useMobiStore } from "@/lib/state";
-import { CheckCircle2, XCircle, RotateCcw, X, ShieldCheck, Sparkles } from "lucide-react";
+import { CheckCircle2, XCircle, RotateCcw, X, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
 
 interface CivicQuizModalProps {
   isOpen: boolean;
@@ -38,7 +38,6 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
     if (currentIdx + 1 < CIVIC_QUIZ_QUESTIONS.length) {
       setCurrentIdx((prev) => prev + 1);
     } else {
-      // Quiz Completed! Award 3 Chat Points directly and reliably
       setIsFinished(true);
       if (!pointsGranted) {
         awardCivicQuizPoints();
@@ -63,11 +62,11 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121417]/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md rounded-[32px] bg-white border border-black/10 shadow-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 font-sans">
+      <div className="w-full max-w-md rounded-2xl bg-[#FAF3E0] border-[2.5px] border-black shadow-[8px_8px_0px_#000] p-6 relative max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 rounded-full text-slate-400 hover:text-black transition-colors"
+          className="brutal-btn absolute top-5 right-5 w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black"
         >
           <X className="w-4 h-4" />
         </button>
@@ -75,22 +74,22 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
         {!isFinished ? (
           <div className="space-y-4">
             <div>
-              <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#121417]" />
+              <div className="flex items-center gap-1.5 text-[10px] font-black uppercase text-stone-500 tracking-wider">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#1D838F]" />
                 <span>Question {currentIdx + 1} of {CIVIC_QUIZ_QUESTIONS.length}</span>
               </div>
-              <h3 className="text-lg font-extrabold text-[#121417] mt-0.5">
+              <h3 className="text-xl font-black text-black mt-0.5">
                 Campus Civic Courtesy Quiz
               </h3>
-              <p className="text-[11px] text-slate-500">
-                Complete this 3-question quiz to verify respectful campus dialogue and earn +3 Chat Points.
+              <p className="text-xs font-bold text-stone-600">
+                Answer correctly to uphold campus guidelines and claim +3 Chat Points.
               </p>
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-white h-2.5 rounded-full border-2 border-black overflow-hidden p-0.5">
               <div
-                className="bg-[#121417] h-full transition-all duration-300"
+                className="bg-[#EEA827] h-full rounded-full transition-all duration-300"
                 style={{
                   width: `${((currentIdx + 1) / CIVIC_QUIZ_QUESTIONS.length) * 100}%`,
                 }}
@@ -98,7 +97,7 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
             </div>
 
             {/* Question Card */}
-            <div className="p-4 rounded-2xl bg-[#F8F9F6] border border-black/5 text-xs font-bold text-[#121417] leading-relaxed">
+            <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] text-xs font-black text-black leading-relaxed">
               {currentQ.question}
             </div>
 
@@ -107,17 +106,17 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
               {currentQ.options.map((option, idx) => {
                 const isSelected = selectedOpt === idx;
                 const isCorrect = idx === currentQ.correctIndex;
-                let btnClass = "bg-white border-slate-200 hover:border-black text-slate-800";
+                let btnClass = "bg-white text-black border-2 border-black hover:bg-[#EEA827]";
 
                 if (selectedOpt !== null) {
                   if (isSelected && isCorrect) {
-                    btnClass = "bg-[#121417] border-[#121417] text-white font-bold";
+                    btnClass = "bg-[#1D838F] text-white border-2 border-black font-black";
                   } else if (isSelected && !isCorrect) {
-                    btnClass = "bg-red-500 border-red-500 text-white font-bold";
+                    btnClass = "bg-[#D84F2A] text-white border-2 border-black font-black";
                   } else if (isCorrect) {
-                    btnClass = "border-[#121417] bg-[#E8F876]/40 text-[#121417] font-bold";
+                    btnClass = "bg-[#879C74] text-white border-2 border-black font-black";
                   } else {
-                    btnClass = "opacity-40 border-slate-200";
+                    btnClass = "opacity-40 bg-white border-2 border-black";
                   }
                 }
 
@@ -126,11 +125,11 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
                     key={idx}
                     onClick={() => handleSelect(idx)}
                     disabled={selectedOpt !== null}
-                    className={`w-full min-h-[46px] p-3 rounded-2xl border text-xs text-left flex items-center justify-between gap-2 transition-all ${btnClass}`}
+                    className={`brutal-btn w-full p-3 rounded-xl text-xs text-left flex items-center justify-between gap-2 ${btnClass}`}
                   >
                     <span>{option}</span>
                     {selectedOpt !== null && isCorrect && (
-                      <CheckCircle2 className="w-4 h-4 text-[#E8F876] shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
                     )}
                     {selectedOpt !== null && isSelected && !isCorrect && (
                       <XCircle className="w-4 h-4 text-white shrink-0" />
@@ -144,7 +143,7 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
               <div className="pt-2">
                 <button
                   onClick={handleNext}
-                  className="w-full min-h-[44px] bg-[#121417] hover:bg-black text-white rounded-full font-extrabold text-xs transition-all shadow-md active:scale-95 flex items-center justify-center gap-1.5"
+                  className="brutal-btn w-full min-h-[44px] bg-[#EEA827] hover:bg-[#e49c18] text-black rounded-xl font-black text-xs uppercase flex items-center justify-center gap-1.5 shadow-[2px_2px_0px_#000]"
                 >
                   <span>
                     {currentIdx + 1 < CIVIC_QUIZ_QUESTIONS.length
@@ -158,25 +157,25 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
         ) : (
           /* Quiz Finished Success Screen */
           <div className="text-center py-6 space-y-4">
-            <div className="w-14 h-14 mx-auto rounded-full bg-[#E8F876] text-[#121417] flex items-center justify-center font-black text-2xl shadow-md">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-[#EEA827] border-2 border-black text-black flex items-center justify-center font-black text-2xl shadow-[3px_3px_0px_#000]">
               ✦
             </div>
 
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              <span className="text-[10px] font-black uppercase tracking-wider text-stone-500">
                 Civic Courtesy Verified
               </span>
-              <h3 className="text-xl font-extrabold text-[#121417] mt-0.5">
+              <h3 className="text-xl font-black text-black mt-0.5">
                 +3 Chat Points Credited!
               </h3>
-              <p className="text-xs text-slate-600 max-w-xs mx-auto mt-1 leading-relaxed">
+              <p className="text-xs font-bold text-stone-600 max-w-xs mx-auto mt-1 leading-relaxed">
                 Thank you for upholding respectful campus dialogue. Your Chat Points balance is now{" "}
-                <span className="font-extrabold text-[#121417]">{wallet.chatPoints} Points</span>.
+                <span className="font-black text-black">{wallet.chatPoints} Points</span>.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-2xl bg-[#F8F9F6] border border-black/5 text-xs text-[#121417] flex items-center justify-center gap-2 font-bold">
-              <Sparkles className="w-4 h-4 text-amber-500" />
+            <div className="p-3.5 rounded-xl bg-white border-2 border-black text-xs text-black flex items-center justify-center gap-2 font-black shadow-[2px_2px_0px_#000]">
+              <Sparkles className="w-4 h-4 text-[#EEA827]" />
               <span>You are now ready to match with peers!</span>
             </div>
 
@@ -186,7 +185,7 @@ export default function CivicQuizModal({ isOpen, onClose, onSuccess }: CivicQuiz
                   onSuccess();
                   onClose();
                 }}
-                className="w-full min-h-[44px] px-6 rounded-full bg-[#121417] hover:bg-black text-white font-extrabold text-xs transition-all shadow-md active:scale-95"
+                className="brutal-btn w-full min-h-[44px] px-6 rounded-xl bg-[#24201E] text-white font-black text-xs uppercase shadow-[2px_2px_0px_#000]"
               >
                 Proceed to Matchmaking →
               </button>

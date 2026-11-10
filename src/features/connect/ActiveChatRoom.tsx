@@ -93,7 +93,7 @@ export default function ActiveChatRoom({
     chatBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Send Message (Real human communication — zero AI bots)
+  // Send Message
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputText.trim() || peerDisconnected) return;
@@ -108,18 +108,15 @@ export default function ActiveChatRoom({
       delivered: true,
     };
 
-    // Add to local screen
     setMessages((prev) => [...prev, newMsg]);
     setInputText("");
 
-    // Broadcast to peer via local bus
     broadcastRef.current?.postMessage({
       type: "CHAT_MSG",
       senderId: currentUserId,
       message: newMsg,
     });
 
-    // Broadcast to peer via Supabase
     if (supabaseChannelRef.current && isSupabaseConfigured) {
       supabaseChannelRef.current.send({
         type: "broadcast",
@@ -127,7 +124,6 @@ export default function ActiveChatRoom({
         payload: newMsg,
       });
 
-      // Also persist to Supabase chat_messages
       supabase
         .from("chat_messages")
         .insert({
@@ -162,10 +158,10 @@ export default function ActiveChatRoom({
 
   if (isBlocked) {
     return (
-      <div className="p-8 text-center space-y-3 bg-[#F8F9F6] rounded-[32px] border border-black/5 font-sans">
-        <UserX className="w-8 h-8 text-red-500 mx-auto" />
-        <h4 className="font-extrabold text-sm text-[#121417]">User Reported & Disconnected</h4>
-        <p className="text-xs text-slate-500">
+      <div className="p-8 text-center space-y-3 bg-[#FAF3E0] rounded-2xl border-[2.5px] border-black shadow-[4px_4px_0px_#000] font-sans">
+        <UserX className="w-8 h-8 text-[#D84F2A] mx-auto" />
+        <h4 className="font-black text-sm text-black">User Reported & Disconnected</h4>
+        <p className="text-xs font-bold text-stone-600">
           This peer has been blocked. Returning to lobby...
         </p>
       </div>
@@ -173,41 +169,41 @@ export default function ActiveChatRoom({
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto rounded-[32px] bg-[#F8F9F6] border border-black/5 flex flex-col h-[calc(88vh-2rem)] overflow-hidden shadow-xl font-sans">
-      {/* 1. Header (Peer info & Omegle controls) */}
-      <div className="p-4 bg-white border-b border-black/5 flex items-center justify-between">
+    <div className="w-full max-w-xl mx-auto rounded-2xl bg-[#FAF3E0] border-[2.5px] border-black flex flex-col h-[calc(88vh-2rem)] overflow-hidden shadow-[6px_6px_0px_#000] font-sans">
+      {/* 1. Header (Peer info & controls) */}
+      <div className="p-4 bg-white border-b-2 border-black flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-9 h-9 rounded-full bg-[#121417] text-[#E8F876] font-extrabold text-xs flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-[#EEA827] text-black border-2 border-black font-black text-xs flex items-center justify-center shadow-[1.5px_1.5px_0px_#000]">
               {opponentName ? opponentName[0].toUpperCase() : "P"}
             </div>
             <span
-              className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white ${
-                peerDisconnected ? "bg-red-500" : "bg-emerald-500 animate-pulse"
+              className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-black ${
+                peerDisconnected ? "bg-[#D84F2A]" : "bg-[#879C74] animate-pulse"
               }`}
             />
           </div>
 
           <div>
             <div className="flex items-center gap-2">
-              <h4 className="font-extrabold text-xs sm:text-sm text-[#121417]">
+              <h4 className="font-black text-xs sm:text-sm text-black">
                 {opponentName || "Campus Peer"}
               </h4>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#E8F876] text-[#121417]">
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#1D838F] text-white border border-black shadow-[1px_1px_0px_#000]">
                 Live
               </span>
             </div>
-            <p className="text-[11px] text-slate-500 font-medium">
+            <p className="text-[11px] text-stone-600 font-bold">
               {opponentDept || "MEA Engineering College"}
             </p>
           </div>
         </div>
 
         {/* Action Controls */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setShowReportModal(true)}
-            className="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+            className="brutal-btn p-2 rounded-lg bg-white text-black hover:bg-[#D84F2A] hover:text-white"
             title="Report violation"
           >
             <ShieldAlert className="w-4 h-4" />
@@ -215,7 +211,7 @@ export default function ActiveChatRoom({
 
           <button
             onClick={handleDisconnect}
-            className="px-3 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-[#121417] text-xs font-bold flex items-center gap-1 transition-all"
+            className="brutal-btn px-3 py-1.5 rounded-lg bg-white text-black text-xs font-black flex items-center gap-1"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Disconnect</span>
@@ -224,14 +220,14 @@ export default function ActiveChatRoom({
       </div>
 
       {/* 2. Message History Area */}
-      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FAFBF8]">
-        {/* Omegle-Style Greeting Banner */}
-        <div className="p-3.5 rounded-2xl bg-white border border-black/5 text-center space-y-1 shadow-sm">
-          <p className="text-xs font-bold text-[#121417]">
-            You are now connected with a student from {opponentDept || "MEA College"}!
+      <div className="flex-1 p-4 overflow-y-auto space-y-3 bg-[#FAF6EB]">
+        {/* Greeting Banner */}
+        <div className="p-3.5 rounded-xl bg-white border-2 border-black text-center space-y-1 shadow-[2px_2px_0px_#000]">
+          <p className="text-xs font-black text-black">
+            Connected with a peer from {opponentDept || "MEA College"}!
           </p>
-          <p className="text-[10px] text-slate-400">
-            Messages are ephemeral. Say hi to start the conversation!
+          <p className="text-[10px] font-bold text-stone-500">
+            Messages are ephemeral. Say hi to begin!
           </p>
         </div>
 
@@ -243,45 +239,45 @@ export default function ActiveChatRoom({
               className={`flex flex-col ${isMe ? "items-end" : "items-start"}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl p-3 text-xs leading-relaxed shadow-sm ${
+                className={`max-w-[80%] rounded-xl p-3 text-xs leading-relaxed border-2 border-black shadow-[2px_2px_0px_#000] ${
                   isMe
-                    ? "bg-[#121417] text-white rounded-br-none"
-                    : "bg-white text-[#121417] border border-black/5 rounded-bl-none"
+                    ? "bg-[#EEA827] text-black"
+                    : "bg-white text-black"
                 }`}
               >
-                <p className="break-words">{msg.content}</p>
+                <p className="break-words font-black">{msg.content}</p>
                 <div
-                  className={`flex items-center justify-end gap-1 mt-1 text-[9px] ${
-                    isMe ? "text-white/50" : "text-slate-400"
+                  className={`flex items-center justify-end gap-1 mt-1 text-[9px] font-bold ${
+                    isMe ? "text-black/60" : "text-stone-500"
                   }`}
                 >
                   <span>{msg.createdAt}</span>
-                  {isMe && <CheckCheck className="w-3 h-3 text-[#E8F876]" />}
+                  {isMe && <CheckCheck className="w-3 h-3 text-black" />}
                 </div>
               </div>
             </div>
           );
         })}
 
-        {/* Peer Disconnected Notice (Omegle style) */}
+        {/* Peer Disconnected Notice */}
         {peerDisconnected && (
-          <div className="p-4 rounded-2xl bg-slate-200/80 text-center space-y-3 my-4 animate-in fade-in">
-            <p className="text-xs font-bold text-slate-700">
-              Stranger has disconnected from the chat.
+          <div className="p-4 rounded-xl bg-white border-2 border-black text-center space-y-3 my-4 shadow-[3px_3px_0px_#000]">
+            <p className="text-xs font-black text-black">
+              Your peer has disconnected from this dialogue.
             </p>
             <div className="flex justify-center gap-2">
               <button
                 onClick={onNextChat}
-                className="px-5 py-2 rounded-full bg-[#121417] hover:bg-black text-white text-xs font-extrabold flex items-center gap-1.5 shadow-sm"
+                className="brutal-btn px-5 py-2 rounded-xl bg-[#EEA827] text-black text-xs font-black flex items-center gap-1.5"
               >
-                <RefreshCw className="w-3.5 h-3.5 text-[#E8F876]" />
+                <RefreshCw className="w-3.5 h-3.5" />
                 <span>Find New Peer</span>
               </button>
               <button
                 onClick={onEndChat}
-                className="px-4 py-2 rounded-full bg-white text-slate-700 text-xs font-bold"
+                className="brutal-btn px-4 py-2 rounded-xl bg-[#FAF3E0] text-black text-xs font-black"
               >
-                Return to Lobby
+                Lobby
               </button>
             </div>
           </div>
@@ -293,7 +289,7 @@ export default function ActiveChatRoom({
       {/* 3. Input Footer */}
       <form
         onSubmit={handleSend}
-        className="p-3 bg-white border-t border-black/5 flex items-center gap-2"
+        className="p-3 bg-white border-t-2 border-black flex items-center gap-2"
       >
         <input
           type="text"
@@ -302,29 +298,29 @@ export default function ActiveChatRoom({
           disabled={peerDisconnected}
           placeholder={
             peerDisconnected
-              ? "Your peer has disconnected. Click 'Find New Peer' above."
+              ? "Peer has disconnected. Click 'Find New Peer' above."
               : "Type a respectful message..."
           }
-          className="flex-1 bg-[#F8F9F6] border border-black/5 rounded-full px-4 py-2.5 text-xs text-[#121417] placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-black/20 disabled:opacity-50"
+          className="flex-1 bg-[#FAF3E0] border-2 border-black rounded-xl px-4 py-2 text-xs font-black text-black placeholder-stone-500 focus:outline-none disabled:opacity-50 shadow-[1.5px_1.5px_0px_#000]"
         />
 
         <button
           type="submit"
           disabled={!inputText.trim() || peerDisconnected}
-          className="w-10 h-10 rounded-full bg-[#121417] hover:bg-black disabled:bg-slate-300 text-white flex items-center justify-center transition-all shadow-sm shrink-0"
+          className="brutal-btn w-10 h-10 rounded-xl bg-[#EEA827] disabled:opacity-40 text-black flex items-center justify-center shrink-0"
         >
-          <Send className="w-4 h-4 text-[#E8F876]" />
+          <Send className="w-4 h-4" />
         </button>
       </form>
 
       {/* Report Modal */}
       {showReportModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-          <div className="w-full max-w-sm rounded-[28px] bg-white p-6 space-y-4 shadow-2xl">
-            <h4 className="font-extrabold text-sm text-[#121417]">
+          <div className="w-full max-w-sm rounded-2xl bg-[#FAF3E0] border-[2.5px] border-black p-6 space-y-4 shadow-[8px_8px_0px_#000]">
+            <h4 className="font-black text-base text-black">
               Report Community Violation
             </h4>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs font-bold text-stone-600">
               Please specify why you are reporting this peer:
             </p>
             <div className="space-y-1.5 text-xs">
@@ -333,10 +329,10 @@ export default function ActiveChatRoom({
                   <button
                     key={reason}
                     onClick={() => setReportReason(reason)}
-                    className={`w-full p-2.5 rounded-xl border text-left font-semibold ${
+                    className={`brutal-btn w-full p-2.5 rounded-xl text-left font-black ${
                       reportReason === reason
-                        ? "border-[#121417] bg-[#E8F876]/30"
-                        : "border-slate-200"
+                        ? "bg-[#EEA827] text-black border-2 border-black"
+                        : "bg-white text-black border-2 border-black"
                     }`}
                   >
                     {reason}
@@ -347,14 +343,14 @@ export default function ActiveChatRoom({
             <div className="flex gap-2 pt-2">
               <button
                 onClick={() => setShowReportModal(false)}
-                className="flex-1 py-2 text-xs font-bold text-slate-500"
+                className="brutal-btn flex-1 py-2 text-xs font-black bg-white text-black rounded-xl"
               >
                 Cancel
               </button>
               <button
                 onClick={handleReportAndBlock}
                 disabled={!reportReason}
-                className="flex-1 py-2 rounded-xl bg-red-600 disabled:opacity-50 text-white text-xs font-bold"
+                className="brutal-btn flex-1 py-2 rounded-xl bg-[#D84F2A] disabled:opacity-50 text-white text-xs font-black"
               >
                 Block & Report
               </button>

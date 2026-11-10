@@ -14,21 +14,21 @@ export default function AnnouncementsFeed() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Category Pills */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
         {[
           { id: "all", label: "All Notices" },
-          { id: "official", label: "Official" },
-          { id: "campaign", label: "Facilities" },
+          { id: "official", label: "Official Circulars" },
+          { id: "campaign", label: "Facility Updates" },
         ].map((tab) => (
           <button
             key={tab.id}
             onClick={() => setFilter(tab.id)}
-            className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all ${
+            className={`brutal-btn px-4 py-2 rounded-xl font-black whitespace-nowrap ${
               filter === tab.id
-                ? "bg-[#121417] text-white shadow-sm"
-                : "bg-[#F4F5F2] text-slate-600 hover:text-black"
+                ? "bg-[#EEA827] text-black border-2 border-black"
+                : "bg-[#FAF3E0] text-black border-2 border-black"
             }`}
           >
             {tab.label}
@@ -37,50 +37,56 @@ export default function AnnouncementsFeed() {
       </div>
 
       {/* Feed */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filtered.map((item) => (
           <div
             key={item.id}
-            className={`p-5 rounded-[24px] border space-y-2.5 transition-all ${
+            className={`p-5 rounded-2xl border-[2.5px] border-black shadow-[4px_4px_0px_#000] space-y-2.5 transition-all ${
               item.pinned
-                ? "bg-white border-black/15 shadow-sm"
-                : "bg-[#F8F9F6] border-black/5"
+                ? "bg-[#FAF3E0]"
+                : "bg-white"
             }`}
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-[#E8F876] text-[#121417]">
+                <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-[#EEA827] text-black border border-black shadow-[1.5px_1.5px_0px_#000]">
                   {item.category.toUpperCase()}
                 </span>
                 {item.department && (
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-xs font-bold text-stone-600">
                     {item.department}
                   </span>
                 )}
               </div>
 
-              {item.pinned && (
-                <span className="flex items-center gap-1 text-[10px] font-bold text-[#121417] bg-[#F4F5F2] px-2.5 py-0.5 rounded-full">
-                  <Pin className="w-3 h-3" />
-                  Pinned
+              <div className="flex items-center gap-2">
+                {item.pinned && (
+                  <span className="flex items-center gap-1 text-[10px] font-black uppercase text-[#D84F2A] bg-white px-2 py-0.5 rounded border border-black">
+                    <Pin className="w-3 h-3 fill-[#D84F2A]" />
+                    Pinned
+                  </span>
+                )}
+                <span className="text-xs font-bold text-stone-500 font-mono">
+                  {item.createdAt}
                 </span>
-              )}
+              </div>
             </div>
 
-            <h3 className="text-sm sm:text-base font-bold text-[#121417]">
-              {item.title}
-            </h3>
+            <div>
+              <h3 className="text-base font-black text-black">
+                {item.title}
+              </h3>
+              <p className="text-xs sm:text-sm font-medium text-stone-700 mt-1 leading-relaxed">
+                {item.content}
+              </p>
+            </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
-              {item.content}
-            </p>
-
-            <div className="pt-2 border-t border-slate-200/50 flex items-center justify-between text-[11px] text-slate-400">
-              <span className="flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-slate-600" />
-                {item.author}
+            <div className="pt-2 border-t-2 border-black/10 flex items-center justify-between text-[11px] font-bold text-stone-500">
+              <span className="flex items-center gap-1 text-[#1D838F] font-black">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Verified Administration Desk
               </span>
-              <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+              <span>MEA Official Record</span>
             </div>
           </div>
         ))}

@@ -20,18 +20,23 @@ export default function MobiEcoPage() {
   };
 
   return (
-    <div className="space-y-6 font-sans text-[#121417]">
+    <div className="space-y-6 font-sans text-[#181514]">
       {/* Top Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#FAF3E0] border-[2.5px] border-black rounded-2xl p-5 shadow-[5px_5px_0px_#000] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            MOBI ECO
-          </span>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#121417] mt-0.5">
-            Waste Management & Facilities
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#1D838F] text-white border border-black shadow-[1.5px_1.5px_0px_#000]">
+              MOBI ECO
+            </span>
+            <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#EEA827] text-black border border-black">
+              ✦ SUSTAINABILITY
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black text-black">
+            Waste Management & Campus Facilities
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Sort waste, locate campus bins, and report issues for 15 Mobi Coins.
+          <p className="text-xs sm:text-sm font-bold text-stone-600 mt-1">
+            Sort waste, locate campus bins, and report overflowing areas for +15 Mobi Coins.
           </p>
         </div>
 
@@ -40,15 +45,15 @@ export default function MobiEcoPage() {
             setSelectedBinId(undefined);
             setIsReportModalOpen(true);
           }}
-          className="min-h-[42px] px-5 rounded-full bg-[#121417] hover:bg-black text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all self-start sm:self-auto shrink-0"
+          className="brutal-btn px-5 py-2.5 rounded-xl bg-[#D84F2A] hover:bg-[#c9431f] text-white text-xs font-black flex items-center justify-center gap-2 self-start sm:self-auto shrink-0"
         >
           <Plus className="w-4 h-4" />
-          <span>Report Waste Issue</span>
+          <span>Report Waste (+15 Coins)</span>
         </button>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
+      <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
         {[
           { id: "game", label: "Sorting Quiz", icon: Recycle },
           { id: "bins", label: "Bins Directory (19)", icon: Trash2 },
@@ -56,14 +61,15 @@ export default function MobiEcoPage() {
           { id: "reports", label: `My Reports (${reports.length})`, icon: AlertCircle },
         ].map((tab) => {
           const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap flex items-center gap-2 transition-all ${
-                activeTab === tab.id
-                  ? "bg-[#121417] text-white shadow-sm"
-                  : "bg-[#F4F5F2] text-slate-600 hover:text-black"
+              className={`brutal-btn px-4 py-2 rounded-xl font-black whitespace-nowrap flex items-center gap-2 ${
+                isActive
+                  ? "bg-[#EEA827] text-black border-2 border-black"
+                  : "bg-[#FAF3E0] text-black border-2 border-black hover:bg-white"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -79,52 +85,54 @@ export default function MobiEcoPage() {
       {activeTab === "facilities" && <FacilityDirectory />}
       {activeTab === "reports" && (
         <div className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {reports.map((rep) => (
-              <div
-                key={rep.id}
-                className="p-5 rounded-[24px] bg-[#F8F9F6] border border-black/5 space-y-2.5"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold bg-white px-2 py-0.5 rounded-lg border border-black/5 text-slate-700">
-                    {rep.id}
-                  </span>
-                  <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-white text-slate-700">
-                    {rep.status}
-                  </span>
-                </div>
+          {reports.length === 0 ? (
+            <div className="p-8 text-center bg-[#FAF3E0] border-[2.5px] border-black rounded-2xl shadow-[4px_4px_0px_#000]">
+              <p className="text-sm font-black text-black">No reports submitted yet.</p>
+              <p className="text-xs font-bold text-stone-500 mt-1">Submit your first report to earn 15 Mobi Coins!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {reports.map((rep) => (
+                <div
+                  key={rep.id}
+                  className="p-5 rounded-2xl bg-[#FAF3E0] border-2 border-black shadow-[3px_3px_0px_#000] space-y-2.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs font-black bg-white px-2 py-0.5 rounded border border-black text-black">
+                      {rep.id}
+                    </span>
+                    <span className="text-[10px] font-black uppercase px-2.5 py-0.5 rounded bg-[#EEA827] text-black border border-black">
+                      {rep.status}
+                    </span>
+                  </div>
 
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-[#121417]">
-                    {rep.locationName}
-                  </h4>
-                  <div className="text-[11px] text-slate-400">
-                    {rep.category.replace("_", " ")}
-                    {rep.binId && ` · Bin: ${rep.binId}`}
+                  <div>
+                    <h4 className="text-sm font-black text-black">
+                      {rep.locationName}
+                    </h4>
+                    <p className="text-xs font-bold text-stone-600 mt-0.5">
+                      {rep.description}
+                    </p>
+                  </div>
+
+                  <div className="text-[10px] font-bold text-stone-500 pt-1 border-t border-black/10 flex items-center justify-between">
+                    <span>Submitted {rep.createdAt}</span>
+                    <span className="text-[#1D838F] font-black">+15 Coins Pending</span>
                   </div>
                 </div>
-
-                <p className="text-xs text-slate-600 bg-white p-3 rounded-2xl border border-black/5">
-                  {rep.description}
-                </p>
-
-                {rep.adminNotes && (
-                  <div className="text-[11px] text-[#121417] bg-[#E8F876]/40 p-2.5 rounded-xl">
-                    <strong>Admin:</strong> {rep.adminNotes}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
       {/* Report Modal */}
-      <StudentReportModal
-        isOpen={isReportModalOpen}
-        onClose={() => setIsReportModalOpen(false)}
-        initialBinId={selectedBinId}
-      />
+      {isReportModalOpen && (
+        <StudentReportModal
+          preselectedBinId={selectedBinId}
+          onClose={() => setIsReportModalOpen(false)}
+        />
+      )}
     </div>
   );
 }

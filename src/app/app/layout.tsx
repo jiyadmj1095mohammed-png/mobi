@@ -15,7 +15,8 @@ import {
   Wallet,
   Megaphone,
   Leaf,
-  HelpCircle,
+  Bell,
+  Sparkles,
 } from "lucide-react";
 
 export default function AppLayout({
@@ -27,7 +28,7 @@ export default function AppLayout({
   const { profile } = useMobiStore();
   const [showLoader, setShowLoader] = useState(true);
 
-  // Check session storage to show 3-second loading screen once per session
+  // Check session storage to show loading screen once per session
   useEffect(() => {
     const hasLoaded = sessionStorage.getItem("mobi_loaded_session");
     if (hasLoaded) {
@@ -51,28 +52,30 @@ export default function AppLayout({
   ];
 
   return (
-    <div className="mobi-app min-h-screen bg-black p-2 sm:p-5 lg:p-7 flex items-center justify-center font-sans antialiased selection:bg-white selection:text-black">
-      <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(255,255,255,0.11),transparent_24%),radial-gradient(circle_at_88%_88%,rgba(255,255,255,0.07),transparent_28%)]" />
+    <div className="min-h-screen bg-[#F4EEDC] p-2 sm:p-4 lg:p-6 flex items-center justify-center font-sans antialiased text-[#181514] selection:bg-[#EEA827] selection:text-black">
+      {/* Decorative Halftone Background Pattern */}
+      <div className="fixed inset-0 retro-halftone opacity-15 pointer-events-none" />
+
       {showLoader && <CampusLoadingScreen onComplete={handleLoadingComplete} />}
       <OnboardingModal />
 
-      {/* Main Rounded App Card Container */}
-      <div className="mobi-app-frame w-full max-w-[1440px] rounded-[32px] sm:rounded-[44px] border border-white/10 p-3 sm:p-5 lg:p-6 flex flex-col md:flex-row gap-4 sm:gap-6 min-h-[92vh] relative overflow-hidden">
+      {/* Main Neo-Brutalist Frame Container */}
+      <div className="w-full max-w-[1440px] bg-[#FAF3E0] rounded-[28px] sm:rounded-[38px] border-[2.5px] border-black shadow-[6px_6px_0px_#000] sm:shadow-[8px_8px_0px_#000] p-3 sm:p-5 lg:p-6 flex flex-col md:flex-row gap-4 sm:gap-6 min-h-[92vh] relative overflow-hidden">
+        
         {/* Sidebar (Desktop & Tablet) */}
-        <aside className="hidden md:flex flex-col justify-between items-center bg-[linear-gradient(160deg,rgba(255,255,255,0.16),rgba(255,255,255,0.035)_45%,rgba(255,255,255,0.08))] text-white rounded-[28px] w-16 lg:w-20 py-5 px-2 shrink-0 border border-white/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.16),0_18px_48px_rgba(0,0,0,0.34)] backdrop-blur-2xl select-none">
-          {/* Brand and navigation */}
+        <aside className="hidden md:flex flex-col justify-between items-center bg-[#24201E] text-white rounded-[24px] w-16 lg:w-20 py-5 px-2 shrink-0 border-2 border-black shadow-[4px_4px_0px_#000] select-none z-20">
+          {/* Brand Logo */}
           <div className="flex flex-col items-center gap-6">
             <Link
-              href="/app"
-              className="mobi-brand-mark w-10 h-10 lg:w-11 lg:h-11 rounded-2xl bg-white/15 hover:bg-white/25 text-white border border-white/15 flex items-center justify-center transition-all"
-              title="MOBI dashboard"
-              aria-label="MOBI dashboard"
+              href="/"
+              className="w-11 h-11 rounded-2xl bg-[#EEA827] text-black border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+              title="Return to Landing Page"
             >
-              <Leaf className="w-5 h-5" />
+              <Leaf className="w-5 h-5 fill-black" />
             </Link>
 
             {/* Nav Icons */}
-            <nav className="flex flex-col items-center gap-2">
+            <nav className="flex flex-col items-center gap-2.5">
               {NAV_ITEMS.map((item) => {
                 const isActive = pathname === item.href;
                 const Icon = item.icon;
@@ -81,16 +84,16 @@ export default function AppLayout({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`w-10 h-10 lg:w-11 lg:h-11 rounded-2xl flex items-center justify-center transition-all group relative ${
+                    className={`w-11 h-11 rounded-2xl flex items-center justify-center transition-all group relative ${
                       isActive
-                        ? "mobi-nav-active bg-white/90 text-black shadow-lg"
-                        : "text-white/60 hover:text-white hover:bg-white/15"
+                        ? "bg-[#EEA827] text-black border-2 border-black shadow-[3px_3px_0px_#000] translate-x-[-1px] translate-y-[-1px]"
+                        : "text-[#FAF3E0]/70 hover:text-white hover:bg-white/10 active:scale-95"
                     }`}
                     title={item.label}
                   >
                     <Icon className="w-5 h-5" />
                     {isActive && (
-                      <span className="absolute -left-1 w-1 h-4 bg-white rounded-full" />
+                      <span className="absolute -left-1 w-1.5 h-4 bg-[#D84F2A] border border-black rounded-full" />
                     )}
                   </Link>
                 );
@@ -98,45 +101,54 @@ export default function AppLayout({
             </nav>
           </div>
 
-          {/* Sidebar links and profile */}
-          <div className="flex flex-col items-center gap-3">
+          {/* Bottom Profile Avatar */}
+          <div className="flex flex-col items-center gap-2">
             <Link
-              href="/app/campus-connect"
-              className="text-white/45 hover:text-white transition-colors"
-              title="Noticeboard & Circulars"
+              href="/app"
+              className="w-10 h-10 rounded-full bg-[#1D838F] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-white font-black text-sm uppercase transition-transform hover:scale-105"
+              title={`Student: ${profile.fullName || "Student"}`}
             >
-              <HelpCircle className="w-5 h-5" />
+              {profile.fullName?.charAt(0) || "M"}
             </Link>
-
-            <div className="w-10 h-10 lg:w-11 lg:h-11 rounded-2xl bg-white/15 text-white border border-white/15 font-extrabold flex items-center justify-center text-xs shadow-sm">
-              {profile.fullName ? profile.fullName[0].toUpperCase() : "M"}
-            </div>
           </div>
         </aside>
 
-        {/* Mobile Top Header (Small Screens Only) */}
-        <header className="md:hidden flex items-center justify-between px-2 pt-1 pb-2 border-b border-white/10 text-white">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-bold text-xs">
-              M
+        {/* Mobile Header */}
+        <header className="md:hidden flex items-center justify-between bg-[#24201E] text-white p-3.5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] z-20">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-[#EEA827] text-black border-2 border-black flex items-center justify-center font-black">
+              <Leaf className="w-4 h-4 fill-black" />
             </div>
-            <span className="font-bold text-sm">MOBI</span>
-          </div>
+            <div>
+              <span className="text-sm font-black tracking-tight text-white block leading-tight">
+                MOBI
+              </span>
+              <span className="text-[9px] font-bold text-[#EEA827] tracking-wider uppercase block">
+                MEA CAMPUS
+              </span>
+            </div>
+          </Link>
 
           <div className="flex items-center gap-2">
-            <div className="px-3 py-1 rounded-full text-xs font-bold bg-white/10 text-white">
-              Hello, {profile.fullName.split(" ")[0] || "Student"}
+            <Link
+              href="/app/campus-connect"
+              className="w-8 h-8 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20"
+            >
+              <Bell className="w-4 h-4" />
+            </Link>
+            <div className="w-8 h-8 rounded-full bg-[#1D838F] border-2 border-black text-white flex items-center justify-center text-xs font-black">
+              {profile.fullName?.charAt(0) || "M"}
             </div>
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
-        <div className="mobi-app-content flex-1 overflow-y-auto max-h-[calc(92vh-2rem)] pr-1 sm:pr-2">
+        {/* Main Content Viewport */}
+        <main className="flex-1 overflow-y-auto pb-20 md:pb-0 z-10">
           {children}
-        </div>
+        </main>
 
-        {/* Mobile Bottom Navigation Bar */}
-        <nav className="md:hidden fixed bottom-3 left-4 right-4 z-40 bg-[linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.06))] text-white rounded-3xl p-1.5 shadow-2xl flex justify-around items-center border border-white/20 backdrop-blur-2xl">
+        {/* Mobile Bottom Navigation Dock */}
+        <nav className="md:hidden fixed bottom-3 left-3 right-3 bg-[#FAF3E0] border-2 border-black rounded-2xl p-2 flex items-center justify-around shadow-[4px_4px_0px_#000] z-40">
           {NAV_ITEMS.slice(0, 5).map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -144,11 +156,16 @@ export default function AppLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`p-2.5 rounded-2xl transition-all ${
-                  isActive ? "mobi-nav-active bg-white text-black" : "text-white/45"
+                className={`p-2 rounded-xl flex flex-col items-center gap-0.5 transition-all ${
+                  isActive
+                    ? "bg-[#EEA827] text-black border-2 border-black shadow-[2px_2px_0px_#000]"
+                    : "text-stone-700 hover:text-black"
                 }`}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="w-4 h-4" />
+                <span className="text-[9px] font-black uppercase tracking-tight">
+                  {item.label}
+                </span>
               </Link>
             );
           })}

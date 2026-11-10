@@ -61,11 +61,11 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#121417]/60 backdrop-blur-md animate-fadeIn">
-      <div className="w-full max-w-md rounded-[32px] bg-white border border-black/5 shadow-2xl p-6 sm:p-7 relative max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn font-sans">
+      <div className="w-full max-w-md rounded-2xl bg-[#FAF3E0] border-[2.5px] border-black shadow-[8px_8px_0px_#000] p-6 relative max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-1.5 rounded-full text-slate-400 hover:text-black"
+          className="brutal-btn absolute top-5 right-5 w-8 h-8 rounded-lg bg-white flex items-center justify-center text-black"
         >
           <X className="w-4 h-4" />
         </button>
@@ -73,30 +73,31 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
         {!confirmedReg ? (
           <div className="space-y-4">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <span className="text-[10px] font-black uppercase px-2 py-0.5 rounded bg-[#1D838F] text-white border border-black shadow-[1.5px_1.5px_0px_#000]">
                 {event.department}
               </span>
-              <h2 className="text-xl font-bold text-[#121417] leading-tight mt-0.5">
+              <h2 className="text-xl font-black text-black leading-tight mt-2">
                 {event.title}
               </h2>
-              <div className="text-xs text-slate-500 flex flex-wrap gap-2.5 mt-2">
+              <div className="text-xs font-bold text-stone-600 flex flex-wrap gap-2.5 mt-2">
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <Calendar className="w-3.5 h-3.5 text-black" />
                   {event.date}
                 </span>
+                <span>•</span>
                 <span className="flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-slate-400" />
+                  <Clock className="w-3.5 h-3.5 text-black" />
                   {event.time}
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-600 leading-relaxed">
+            <p className="text-xs font-medium text-stone-700 leading-relaxed">
               {event.description}
             </p>
 
             {error && (
-              <div className="p-3 rounded-2xl bg-red-50 text-red-600 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-xl bg-[#D84F2A] text-white text-xs font-black flex items-center gap-2 border-2 border-black">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{error}</span>
               </div>
@@ -104,22 +105,22 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
 
             {/* Mobi Coin Discount Slider */}
             {event.fee > 0 && (
-              <div className="p-4 rounded-2xl bg-[#F8F9F6] border border-black/5 space-y-2.5">
+              <div className="p-4 rounded-xl bg-white border-2 border-black shadow-[2px_2px_0px_#000] space-y-2.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#121417] flex items-center gap-1.5">
-                    <Coins className="w-4 h-4 text-slate-700" />
+                  <span className="font-black text-black flex items-center gap-1.5">
+                    <Coins className="w-4 h-4 text-black" />
                     Mobi Coin Discount
                   </span>
-                  <span className="text-slate-500">
+                  <span className="text-stone-600 font-bold">
                     Wallet: <strong>{wallet.mobiCoins} Coins</strong>
                   </span>
                 </div>
 
                 {maxApplicableCoins > 0 ? (
                   <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                      <span className="text-slate-500">Apply Coins:</span>
-                      <span className="font-bold text-[#121417]">
+                    <div className="flex justify-between text-xs font-black">
+                      <span className="text-stone-600">Apply Coins:</span>
+                      <span className="text-[#1D838F]">
                         {coinsToUse} Coins (-₹{coinsToUse})
                       </span>
                     </div>
@@ -129,30 +130,30 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
                       max={maxApplicableCoins}
                       value={coinsToUse}
                       onChange={(e) => setCoinsToUse(Number(e.target.value))}
-                      className="w-full accent-[#121417] cursor-pointer"
+                      className="w-full accent-[#EEA827] cursor-pointer"
                     />
                   </div>
                 ) : (
-                  <p className="text-[11px] text-slate-500">
-                    Earn Mobi Coins through waste reports to unlock fee discounts.
+                  <p className="text-[11px] font-bold text-stone-500">
+                    Earn Mobi Coins through waste reports to unlock event pass discounts.
                   </p>
                 )}
               </div>
             )}
 
             {/* Price Summary */}
-            <div className="p-3.5 rounded-2xl bg-[#F4F5F2] text-xs space-y-1">
-              <div className="flex justify-between text-slate-500">
+            <div className="p-3.5 rounded-xl bg-white border-2 border-black text-xs font-bold space-y-1 shadow-[2px_2px_0px_#000]">
+              <div className="flex justify-between text-stone-600">
                 <span>Standard Fee:</span>
                 <span>₹{event.fee}</span>
               </div>
               {coinsToUse > 0 && (
-                <div className="flex justify-between text-slate-800 font-semibold">
+                <div className="flex justify-between text-[#1D838F] font-black">
                   <span>Coins Discount:</span>
                   <span>- ₹{coinsToUse}</span>
                 </div>
               )}
-              <div className="pt-1.5 border-t border-slate-300 flex justify-between font-bold text-sm text-[#121417]">
+              <div className="pt-1.5 border-t-2 border-black/10 flex justify-between font-black text-sm text-black">
                 <span>Payable Amount:</span>
                 <span>{finalPrice === 0 ? "Free" : `₹${finalPrice}`}</span>
               </div>
@@ -160,32 +161,32 @@ export default function EventDetailModal({ event, onClose }: EventDetailModalPro
 
             <button
               onClick={handleRegister}
-              className="w-full min-h-[46px] rounded-2xl bg-[#121417] hover:bg-black text-white font-bold text-xs shadow-md transition-all flex items-center justify-center gap-2"
+              className="brutal-btn w-full min-h-[44px] rounded-xl bg-[#EEA827] hover:bg-[#e49c18] text-black font-black text-xs uppercase shadow-[3px_3px_0px_#000] flex items-center justify-center gap-2"
             >
               <Ticket className="w-4 h-4" />
-              <span>Confirm Ticket</span>
+              <span>Confirm Pass Registration</span>
             </button>
           </div>
         ) : (
           <div className="text-center py-5 space-y-4">
-            <div className="w-12 h-12 mx-auto rounded-full bg-[#E8F876] text-[#121417] flex items-center justify-center font-bold text-xl">
+            <div className="w-12 h-12 mx-auto rounded-xl bg-[#EEA827] border-2 border-black text-black flex items-center justify-center font-black text-xl shadow-[3px_3px_0px_#000]">
               ✓
             </div>
-            <h3 className="text-lg font-bold text-[#121417]">
-              Ticket Confirmed
+            <h3 className="text-xl font-black text-black">
+              Pass Confirmed!
             </h3>
-            <div className="p-4 rounded-2xl bg-[#121417] text-white text-left space-y-2">
-              <div className="text-[10px] text-slate-400 font-mono">ID: {confirmedReg.id}</div>
-              <div className="font-bold text-sm text-[#E8F876]">{confirmedReg.eventTitle}</div>
-              <div className="text-xs text-slate-300">Attendee: {confirmedReg.userName}</div>
-              <div className="text-xs text-slate-400 pt-1 border-t border-white/10 flex justify-between">
+            <div className="p-4 rounded-xl bg-[#24201E] border-2 border-black text-white text-left space-y-2 shadow-[3px_3px_0px_#000]">
+              <div className="text-[10px] text-stone-400 font-mono">ID: {confirmedReg.id}</div>
+              <div className="font-black text-sm text-[#EEA827]">{confirmedReg.eventTitle}</div>
+              <div className="text-xs text-stone-300">Attendee: {confirmedReg.userName}</div>
+              <div className="text-xs text-stone-400 pt-1 border-t border-white/10 flex justify-between">
                 <span>Coins Used: {confirmedReg.coinsUsed}</span>
-                <span className="font-bold text-white">Paid: ₹{confirmedReg.finalPaid}</span>
+                <span className="font-black text-white">Paid: ₹{confirmedReg.finalPaid}</span>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="min-h-[42px] px-6 rounded-full bg-[#121417] text-white font-bold text-xs"
+              className="brutal-btn px-6 py-2.5 rounded-xl bg-[#24201E] text-white font-black text-xs"
             >
               Done
             </button>
