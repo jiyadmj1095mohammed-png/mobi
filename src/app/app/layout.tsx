@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useMobiStore } from "@/lib/state";
 import OnboardingModal from "@/components/shared/OnboardingModal";
 import CampusLoadingScreen from "@/components/shared/CampusLoadingScreen";
+import { MobiMark } from "@/components/shared/MobiLogo";
 import {
   Home,
   Compass,
@@ -14,7 +15,6 @@ import {
   MessageSquare,
   Wallet,
   Megaphone,
-  Leaf,
   Bell,
   Sparkles,
 } from "lucide-react";
@@ -68,10 +68,10 @@ export default function AppLayout({
           <div className="flex flex-col items-center gap-6">
             <Link
               href="/"
-              className="w-11 h-11 rounded-2xl bg-[#EEA827] text-black border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center transition-transform hover:scale-105 active:scale-95"
+              className="w-11 h-11 transition-transform hover:scale-105 active:scale-95 flex items-center justify-center"
               title="Return to Landing Page"
             >
-              <Leaf className="w-5 h-5 fill-black" />
+              <MobiMark className="w-11 h-11" />
             </Link>
 
             {/* Nav Icons */}
@@ -115,16 +115,14 @@ export default function AppLayout({
 
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between bg-[#24201E] text-white p-3.5 rounded-2xl border-2 border-black shadow-[3px_3px_0px_#000] z-20">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-[#EEA827] text-black border-2 border-black flex items-center justify-center font-black">
-              <Leaf className="w-4 h-4 fill-black" />
-            </div>
+          <Link href="/" className="flex items-center gap-2.5">
+            <MobiMark className="w-8 h-8" />
             <div>
               <span className="text-sm font-black tracking-tight text-white block leading-tight">
                 MOBI
               </span>
               <span className="text-[9px] font-bold text-[#EEA827] tracking-wider uppercase block">
-                MEA CAMPUS
+                EVERGREEN CAMPUS
               </span>
             </div>
           </Link>

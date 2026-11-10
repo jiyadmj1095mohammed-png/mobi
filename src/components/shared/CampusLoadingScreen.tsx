@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Leaf, Sparkles, ArrowRight, Compass, ShieldCheck } from "lucide-react";
+import { MobiMark } from "@/components/shared/MobiLogo";
 
 export default function CampusLoadingScreen({ onComplete }: { onComplete?: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -73,9 +74,9 @@ export default function CampusLoadingScreen({ onComplete }: { onComplete?: () =>
         {/* Center Mascot / Icon */}
         <div className="pt-6 pb-4 flex flex-col items-center text-center">
           <div className="relative mb-5">
-            {/* Background shadow badge */}
-            <div className="w-20 h-20 rounded-2xl bg-[#EEA827] border-[2.5px] border-black shadow-[4px_4px_0px_#000] flex items-center justify-center -rotate-3 transition-transform hover:rotate-0">
-              <Leaf className="w-10 h-10 text-black fill-[#FAF3E0]" />
+            {/* Brand Emblem */}
+            <div className="w-20 h-20 rounded-2xl bg-black border-[2.5px] border-black shadow-[4px_4px_0px_#000] flex items-center justify-center -rotate-3 transition-transform hover:rotate-0 overflow-hidden">
+              <MobiMark className="w-16 h-16" />
             </div>
             {/* Mini Star Badge */}
             <div className="absolute -top-2 -right-2 w-7 h-7 rounded-full bg-[#1D838F] border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-white text-xs font-black">

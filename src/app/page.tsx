@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import MobiLogo from "@/components/shared/MobiLogo";
 
 export default function CinematicHeroPage() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -84,14 +85,9 @@ export default function CinematicHeroPage() {
 
       {/* Navigation Bar (z-10) */}
       <header className="relative z-10 max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
-        {/* Logo: MOBI® in Instrument Serif */}
-        <Link href="/" className="group flex items-baseline">
-          <span
-            className="text-3xl tracking-tight text-[#000000] font-serif select-none"
-            style={{ fontFamily: "'Instrument Serif', Georgia, serif" }}
-          >
-            MOBI<sup className="text-sm font-sans font-normal ml-0.5">®</sup>
-          </span>
+        {/* Distinctive Brand Logo */}
+        <Link href="/" className="group flex items-center">
+          <MobiLogo size="md" variant="full" theme="dark" />
         </Link>
 
         {/* Menu Items */}
@@ -131,7 +127,7 @@ export default function CinematicHeroPage() {
         {/* CTA Button */}
         <Link
           href="/app"
-          className="rounded-full px-6 py-2.5 text-sm bg-[#000000] text-white hover:scale-[1.03] transition-transform font-medium select-none"
+          className="rounded-full px-6 py-2.5 text-sm bg-[#000000] text-white hover:scale-[1.03] transition-transform font-medium select-none shadow-sm"
         >
           Begin Journey
         </Link>

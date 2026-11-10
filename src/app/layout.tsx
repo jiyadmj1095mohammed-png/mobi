@@ -5,12 +5,17 @@ export const metadata: Metadata = {
   title: "MOBI — Campus Ecosystem | MEA Engineering College",
   description: "A student-powered digital campus ecosystem for MEA Engineering College uniting 3D navigation, waste care, event discounts, and student communication.",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "32x32" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#B8C4B8",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -24,7 +29,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#B8C4B8] text-[#121417] min-h-screen font-sans antialiased overflow-x-hidden">
+      <body className="bg-[#FFFFFF] text-[#000000] min-h-screen font-sans antialiased overflow-x-hidden">
         {children}
       </body>
     </html>
